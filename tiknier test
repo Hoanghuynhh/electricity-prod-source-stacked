@@ -1,0 +1,38 @@
+from tkinter import *
+
+def on_select(value, year, quantity):
+    print(f"Giá trị bạn chọn là: {value}")
+    print(f"Năm bạn chọn là: {year}")
+    print(f"Số lượng bạn nhập là: {quantity}")
+
+window = Tk()
+
+window.title('Bảng chọn các nguồn tạo điện năng')
+window.resizable(height=True, width=True)
+window.minsize(height=300, width=400)
+
+Label(window, text='Các nhiên liệu tạo điện', fg='blue', justify=CENTER).pack(pady=10)
+
+choices = choices = ["Other", "Bioenergy", "Solar", "Wind", "Hydro", "Nuclear", "Oil", "Gas", "Coal"]
+selected_value = StringVar()
+
+Label(window, text="Chọn loại nhiên liệu").pack(pady=5)
+option_menu = OptionMenu(window, selected_value, *choices)
+option_menu.pack()
+
+years = [str(year) for year in range(1985, 2024)]  
+selected_year = StringVar()
+selected_year.set(years[0])
+
+Label(window, text="Chọn năm").pack(pady=5)
+year_menu = OptionMenu(window, selected_year, *years)
+year_menu.pack()
+
+Label(window, text="Nhập số lượng (MW)").pack(pady=5)
+quantity = Spinbox(window, from_=0, to=10000, width=10)
+quantity.pack()
+
+button = Button(window, text="Lựa chọn", command=lambda: on_select(selected_value.get(), selected_year.get(), quantity.get()))
+button.pack(pady=20)
+
+window.mainloop()
