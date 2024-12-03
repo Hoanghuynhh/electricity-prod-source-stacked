@@ -1,38 +1,51 @@
-from tkinter import *
+import tkinter as tk
 
-def on_select(value, year, quantity):
-    print(f"Giá trị bạn chọn là: {value}")
-    print(f"Năm bạn chọn là: {year}")
-    print(f"Số lượng bạn nhập là: {quantity}")
+# Hàm xử lý khi nhấn nút xác nhận
+def on_confirm():
+    country = country_var.get()
+    year = year_scale.get()
+    print(f"Quốc gia đã chọn: {country}")
+    print(f"Năm đã chọn: {year}")
 
-window = Tk()
+# Tạo cửa sổ chính
+root = tk.Tk()
+root.title("Ứng dụng Tkinter với lựa chọn quốc gia và năm")
+root.geometry("600x400")  # Kích thước cửa sổ
 
-window.title('Bảng chọn các nguồn tạo điện năng')
-window.resizable(height=True, width=True)
-window.minsize(height=300, width=400)
+# Tạo một frame chính chia làm 2 phần: bên trái và bên phải
+frame = tk.Frame(root, width=600, height=400)
+frame.pack_propagate(False)  # Không thay đổi kích thước của frame theo các widget con
+frame.pack()
 
-Label(window, text='Các nhiên liệu tạo điện', fg='blue', justify=CENTER).pack(pady=10)
+# Tạo phần bên trái (nền đen, chiếm 1/4 chiều rộng cửa sổ)
+left_frame = tk.Frame(frame, width=150, height=400, bg="black")
+left_frame.grid(row=0, column=0)
 
-choices = choices = ["Other", "Bioenergy", "Solar", "Wind", "Hydro", "Nuclear", "Oil", "Gas", "Coal"]
-selected_value = StringVar()
+# Tạo phần bên phải (nền trắng, chiếm 3/4 chiều rộng cửa sổ)
+right_frame = tk.Frame(frame, width=450, height=400, bg="white")
+right_frame.grid(row=0, column=1)
 
-Label(window, text="Chọn loại nhiên liệu").pack(pady=5)
-option_menu = OptionMenu(window, selected_value, *choices)
-option_menu.pack()
+# Danh sách các quốc gia
+countries = ["Việt Nam", "Hoa Kỳ", "Nhật Bản", "Ấn Độ", "Pháp", "Anh", "Canada"]
 
-years = [str(year) for year in range(1985, 2024)]  
-selected_year = StringVar()
-selected_year.set(years[0])
+# Tạo biến để lưu quốc gia được chọn
+country_var = tk.StringVar()
+country_var.set(countries[0])  # Mặc định là quốc gia đầu tiên trong danh sách
 
-Label(window, text="Chọn năm").pack(pady=5)
-year_menu = OptionMenu(window, selected_year, *years)
-year_menu.pack()
+# Tạo label và menu thả xuống để chọn quốc gia
+country_label = tk.Label(left_frame, text="Chọn quốc gia", fg="white", bg="black")
+country_label.pack(pady=20)
 
-Label(window, text="Nhập số lượng (MW)").pack(pady=5)
-quantity = Spinbox(window, from_=0, to=10000, width=10)
-quantity.pack()
+country_menu = tk.OptionMenu(left_frame, country_var, *countries)
+country_menu.pack(pady=10)
 
-button = Button(window, text="Lựa chọn", command=lambda: on_select(selected_value.get(), selected_year.get(), quantity.get()))
-button.pack(pady=20)
+# Tạo thanh kéo (Scale) để chọn năm
+year_scale = tk.Scale(left_frame, from_=1900, to=2024, orient="horizontal", bg="black", fg="white", label="Chọn năm")
+year_scale.pack(pady=50)
 
-window.mainloop()
+# Thêm nút xác nhận vào phần đen bên trái
+confirm_button = tk.Button(left_frame, text="Xác nhận", command=on_confirm, bg="white", fg="black")
+confirm_button.pack(pady=20)
+
+# Chạy ứng dụng Tkinter
+root.mainloop()
