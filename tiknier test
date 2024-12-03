@@ -1,51 +1,40 @@
 import tkinter as tk
 
-# Hàm xử lý khi nhấn nút xác nhận
 def on_confirm():
     country = country_var.get()
     year = year_scale.get()
     print(f"Quốc gia đã chọn: {country}")
     print(f"Năm đã chọn: {year}")
 
-# Tạo cửa sổ chính
 root = tk.Tk()
 root.title("Ứng dụng Tkinter với lựa chọn quốc gia và năm")
-root.geometry("600x400")  # Kích thước cửa sổ
+root.geometry("600x400")
 
-# Tạo một frame chính chia làm 2 phần: bên trái và bên phải
 frame = tk.Frame(root, width=600, height=400)
-frame.pack_propagate(False)  # Không thay đổi kích thước của frame theo các widget con
+frame.pack_propagate(False)
 frame.pack()
 
-# Tạo phần bên trái (nền đen, chiếm 1/4 chiều rộng cửa sổ)
 left_frame = tk.Frame(frame, width=150, height=400, bg="black")
 left_frame.grid(row=0, column=0)
 
-# Tạo phần bên phải (nền trắng, chiếm 3/4 chiều rộng cửa sổ)
 right_frame = tk.Frame(frame, width=450, height=400, bg="white")
 right_frame.grid(row=0, column=1)
 
-# Danh sách các quốc gia
 countries = ["Việt Nam", "Hoa Kỳ", "Nhật Bản", "Ấn Độ", "Pháp", "Anh", "Canada"]
 
-# Tạo biến để lưu quốc gia được chọn
 country_var = tk.StringVar()
-country_var.set(countries[0])  # Mặc định là quốc gia đầu tiên trong danh sách
+country_var.set(countries[0])
 
-# Tạo label và menu thả xuống để chọn quốc gia
 country_label = tk.Label(left_frame, text="Chọn quốc gia", fg="white", bg="black")
 country_label.pack(pady=20)
 
 country_menu = tk.OptionMenu(left_frame, country_var, *countries)
 country_menu.pack(pady=10)
 
-# Tạo thanh kéo (Scale) để chọn năm
 year_scale = tk.Scale(left_frame, from_=1900, to=2024, orient="horizontal", bg="black", fg="white", label="Chọn năm")
 year_scale.pack(pady=50)
 
-# Thêm nút xác nhận vào phần đen bên trái
 confirm_button = tk.Button(left_frame, text="Xác nhận", command=on_confirm, bg="white", fg="black")
 confirm_button.pack(pady=20)
 
-# Chạy ứng dụng Tkinter
 root.mainloop()
