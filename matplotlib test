@@ -1,0 +1,24 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+start_year = int(input("Nhập năm bắt đầu: "))
+end_year = int(input("Nhập năm kết thúc: "))
+material = input("Nhập loại nguyên liệu (ví dụ: Other, Bioenergy, Solar, Wind, Hydro, Nuclear, Oil, Gas, Coal ): ").strip().lower()
+
+country = input("Nhập tên quốc gia : ").strip().capitalize()
+
+df = pd.read_csv("data.csv")
+
+  
+df_filtered = df[(df['year'] >= start_year) & (df['year'] <= end_year) & (df['country'] == country)]
+
+plt.figure(figsize=(10,10))
+plt.fill_between(df_filtered['year'], df_filtered[f'{material}_quantity'], color="skyblue", alpha=0.4)
+
+
+plt.title(f"Số lượng {material.capitalize()} của {country} từ năm {start_year} đến {end_year}")
+plt.xlabel("Năm")
+plt.ylabel(f"Số lượng {material.capitalize()}")
+
+plt.grid(True)
+plt.show()
