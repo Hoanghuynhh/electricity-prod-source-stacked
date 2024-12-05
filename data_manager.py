@@ -158,8 +158,48 @@ class Get_Country_Data:
             energy_data_final = []
             for year in list_year_available:
                 energy_data_available = self.Get_aData_1Country_1Year(country_name, str(year))
-                energy_data_final.append(energy_data_available)
+                if energy_data_available != []:
+                    energy_data_final.append(energy_data_available)
 
             return energy_data_final
         return "#None_Data"
     
+    def Get_Data_From_Year_to_Year_Graph(self, country_name, year_start, year_end):
+        # Kiểm tra xem year_start và year_end có phải là số nguyên không
+        if not (year_start.isdigit() and year_end.isdigit()):
+            return "#None_Data"
+
+        year_start = int(year_start)
+        year_end = int(year_end)
+        years = []
+        Other = []
+        Bioenergy = []
+        Solar = []
+        Wind = []
+        Hydro = []
+        Nuclear = []
+        Oil= []
+        Gas = []
+        Coal = []
+        if year_start >= year_end:
+            return "#None_Data"
+
+        list_year_available = [year for year in range(year_start, year_end + 1)]
+        
+        if country_name in self.data:
+            energy_data_final = []
+            for year in list_year_available:
+                energy_data_available = self.Get_aData_1Country_1Year(country_name, str(year))
+                if energy_data_available != []:
+                    years.append(int(energy_data_available[1]))
+                    Other.append(energy_data_available[2])
+                    Bioenergy.append(energy_data_available[3])
+                    Solar.append(energy_data_available[4])
+                    Wind.append(energy_data_available[5])
+                    Hydro.append(energy_data_available[6])
+                    Nuclear.append(energy_data_available[7])
+                    Oil.append(energy_data_available[8])
+                    Gas.append(energy_data_available[9])
+                    Coal.append(energy_data_available[10])
+            return years,Other,Bioenergy,Solar,Wind,Hydro,Nuclear,Oil,Gas,Coal
+        return "#None_Data"
