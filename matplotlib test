@@ -1,24 +1,60 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 
-start_year = int(input("Nhập năm bắt đầu: "))
-end_year = int(input("Nhập năm kết thúc: "))
-material = input("Nhập loại nguyên liệu (ví dụ: Other, Bioenergy, Solar, Wind, Hydro, Nuclear, Oil, Gas, Coal ): ").strip().lower()
+n = [[2000],[15],[15],[15],[15],[15],[15],[5],[5]]
+years = n[0]
+other = n[1]
+Bioenergy = n[2]
+Solar = n[3]
+Wind = n[4]
+Hydro = n[5]
+Nuclear = n[6]
+Old = n[7]
+Gas = n[8]
 
-country = input("Nhập tên quốc gia : ").strip().capitalize()
+def biểu_đồ_đường ():
 
-df = pd.read_csv("data.csv")
+    plt.title('BIỂU ĐỒ CÁC DẠNG NĂNG LƯỢNG TỪ NĂM {start_year} ĐẾN NĂM {end_year}')
+    plt.xticks(years)
+    plt.yticks([50,100,200,300,400,500,600,700,800,900,1000])
+    plt.xlabel('Số năm')
+    plt.ylabel('Năng lượng đã sử dụng')
+    plt.plot(years,other,marker='o',markerfacecolor='black',color='black')
+    plt.plot(years,Bioenergy,marker='o',markerfacecolor='red',color='red')
+    plt.plot(years,Solar,marker='o',markerfacecolor='blue',color='blue')
+    plt.plot(years,Wind,marker='o',markerfacecolor='yellow',color='yellow')
+    plt.plot(years,Hydro,marker='o',markerfacecolor='grey',color='grey')
+    plt.plot(years,Nuclear,marker='o',markerfacecolor='magenta',color='magenta')
+    plt.plot(years,Old,marker='o',markerfacecolor='green',color='green')
+    plt.plot(years,Gas,marker='o',markerfacecolor='cyan',color='cyan')
+    
+    plt.legend(['other',
+            'Bioenergy',
+            'Solar',
+            'Wind',
+            'Hydro',
+            'Nuclear',
+            'Old',
+            'Gas'],loc = 'upper left')
+    plt.show()
 
-  
-df_filtered = df[(df['year'] >= start_year) & (df['year'] <= end_year) & (df['country'] == country)]
+################
 
-plt.figure(figsize=(10,10))
-plt.fill_between(df_filtered['year'], df_filtered[f'{material}_quantity'], color="skyblue", alpha=0.4)
+def biểu_đồ_tròn():
+    
+    nang_luong = ['Other', 'Bioenergy', 'Solar', 'Wind', 'Hydro', 'Nuclear', 'Old', 'Gas']
+    so_lieu = [n[1][0],n[2][0],n[3][0],n[4][0],n[5][0],n[6][0],n[7][0],n[8][0]]
+
+    plt.figure(figsize=(7, 7))
+    plt.title('biểu đồ năng lượng trong năm')
+    plt.pie(so_lieu,labels = nang_luong,autopct='%1.2f%%')
+
+    plt.show()
 
 
-plt.title(f"Số lượng {material.capitalize()} của {country} từ năm {start_year} đến {end_year}")
-plt.xlabel("Năm")
-plt.ylabel(f"Số lượng {material.capitalize()}")
+biểu_đồ_tròn()
 
-plt.grid(True)
-plt.show()
+
+
+
