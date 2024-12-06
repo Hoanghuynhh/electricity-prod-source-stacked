@@ -67,13 +67,6 @@ class App(customtkinter.CTk):
             command = self.update_handle
         )
         self.btn_update.grid(row=4, column=0, pady=(5, 10), padx=5)
-        self.btn_graph_update = customtkinter.CTkButton(
-            master= self.left_frame,
-            text = 'Update graph'
-        )
-        self.btn_graph_update.grid(row=5, column=0, pady=(5, 10), padx=5)
-
-        self.toplevel_window = None
 
         self.btn_settings = customtkinter.CTkButton(
             master=self.left_frame,
