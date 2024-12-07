@@ -55,7 +55,7 @@ class Country_Data_Manager:
         """
         return energy_type in self.data[country_name][year]
     
-    '''Khởi tạo giá trị rỗng thuận tiện việc xóa dữ liệu'''
+    '''Khởi tạo giá trị rỗng thuận tiện việc sửa, xóa dữ liệu'''
     clearly_data = {
             "Other": "0",
             "Bioenergy": "0",
@@ -89,18 +89,34 @@ class Country_Data_Manager:
         if self.is_country_year(country_name, year):
             self.data[country_name][year][energy_type] = new_value
             self.save_data()
-    
-    def create_data(self, country_name: str, year: str, new_value: dict) -> None:
+
+    def listenergy_to_dict(self, new_value: list) -> dict:
+        """
+        Xử lí dữ liệu đầu vào list -> dict
+
+        input: List (9 values)
+        output: Dict (9 items)
+        """
+        value_to_dict = self.clearly_data
+
+        for i in new_value:
+            for key in value_to_dict.keys(): 
+                value_to_dict[key] = i
+
+        return value_to_dict
+
+    def create_data(self, country_name: str, year: str, new_values: list) -> None:
         """
         Thêm dữ liệu của một năm mới vào Country/Json_File
 
         input: Country_Name(str), Year(str), New_Value(dict)
         output: None
         """
+        
         if int(year) >= 0:
-            self.data[country_name][year] = new_value
+            self.data[country_name][year] = self.listenergy_to_dict(new_values)
             self.save_data()
-    
+
     def delete_data_energy(self, country_name: str, year: str, energy_type: str) -> None:
         """
         Đưa dữ liệu của Energy_Type trong Year/Countr/Json_File về '0'
@@ -136,6 +152,10 @@ class Country_Data_Manager:
 
 
 if __name__ == '__main__':
-    loader = Country_Data_Manager('simplified_data.json')
-    print(loader)
-    
+    loader = Country_Data_Manager('data.json')
+    lst_temp = []
+    for i in range(9):
+        x = str(input(f'{i}: '))
+        lst_temp.append(x)
+
+    loader.create_data('ASEAN (Ember)', '1999', lst_temp)
