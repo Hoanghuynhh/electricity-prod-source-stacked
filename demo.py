@@ -34,7 +34,7 @@ class App(customtkinter.CTk):
         self.right_frame.grid(row=0, column=1, sticky="nswe",padx = 10,pady = 10)
 
         #------------Left-Side (frame_left)---------------#
-
+        
         self.label_title = customtkinter.CTkLabel(master=self.left_frame, text="Electricity Production By Source")
         self.label_title.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
         self.country = customtkinter.StringVar
@@ -44,7 +44,7 @@ class App(customtkinter.CTk):
             values=Get_Country_Data('data.json').Get_Country_Name(),
         )
         self.country_menu.grid(row=1, column=0, sticky="nsew", padx=10, pady=10)
-
+        
         self.varyearstart = customtkinter.IntVar(value=2000)
         self.varyearend = customtkinter.IntVar(value=2023)
 
@@ -52,7 +52,6 @@ class App(customtkinter.CTk):
             master= self.left_frame,
         )
         self.left_textbox.grid(row=2, column=0, sticky="nswe",padx = 10,pady = 10)
-        
 
         self.slider = CTkRangeSlider(master= self.left_textbox, from_=2000, to=2023,number_of_steps=38,variables = [self.varyearstart, self.varyearend],width=150)
         self.slider.grid(row=2, column=2, sticky="nswe",padx = 10,pady = 10)
@@ -67,14 +66,16 @@ class App(customtkinter.CTk):
             command = self.update_handle
         )
         self.btn_update.grid(row=4, column=0, pady=(5, 10), padx=5)
-
+        
         self.btn_settings = customtkinter.CTkButton(
             master=self.left_frame,
             text="Adjust Data",
             command=self.open_toplevel
         )
-
+        self.toplevel_window = None
         self.btn_settings.grid(row=6, column=0, pady=(5, 10), padx=5)
+
+
         #------------Right-Side (frame_right)---------------#
         self.right_frame.grid_columnconfigure(0, weight=1)
         self.right_frame.grid_rowconfigure(0, weight=1)
@@ -156,6 +157,10 @@ class ToplevelWindow(customtkinter.CTkToplevel):
         self.btn_delete.grid(row=5, column=0, pady=(5, 10), padx=5)
         self.btn_edit.grid(row=5, column=1, pady=(5, 10), padx=5)
 
+    
+
+  
+    
 class MyTabView(customtkinter.CTkTabview):
     def __init__(self,master,years,country,**kwargs):
         super().__init__(master,**kwargs)
