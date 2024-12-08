@@ -103,6 +103,7 @@ class App(customtkinter.CTk):
         """Khởi tạo cửa sổ phụ"""
         if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
             self.toplevel_window = ToplevelWindow(self)
+            self.toplevel_window.title("Adjust Data")
         else:
             self.toplevel_window.focus()
 
@@ -110,9 +111,50 @@ class App(customtkinter.CTk):
 class ToplevelWindow(customtkinter.CTkToplevel):
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
-        self.geometry("400x300")
-        self.label = customtkinter.CTkLabel(self, text="ToplevelWindow")
-        self.label.pack(padx=20, pady=20)
+        self.geometry("300x220")
+        self.create_widgets()
+    def create_widgets(self):
+        self.label_country = customtkinter.CTkLabel(self, text="Country :")
+        self.label_country.grid(row=1, column=0, pady=(5, 10), padx=5)
+
+        self.country_var = customtkinter.StringVar()
+        self.country_menu = customtkinter.CTkOptionMenu(self, 
+            variable=self.country_var, 
+            values=Get_Country_Data('data.json').Get_Country_Name()
+        )
+        self.country_menu.grid(row=1, column=1, pady=(5, 10), padx=5)
+
+        self.label_year = customtkinter.CTkLabel(self, text="Year :")
+        self.label_year.grid(row=2, column=0, pady=(5, 10), padx=5)
+
+        self.year_var = customtkinter.StringVar()
+        self.year_menu = customtkinter.CTkOptionMenu(self, 
+            variable=self.year_var, 
+            values=[str(year) for year in range(2000, 2024)]  
+        )
+        self.year_menu.grid(row=2, column=1, pady=(5, 10), padx=5)
+
+        self.label_source = customtkinter.CTkLabel(self, text="Type of Source : ")
+        self.label_source.grid(row=3, column=0, pady=(5, 10), padx=5)
+
+        self.source_var = customtkinter.StringVar()
+        self.source_menu = customtkinter.CTkOptionMenu(self, 
+            variable=self.source_var, 
+            values=["Other", "Bioenergy", "Solar", "Wind", "Hydro", "Nuclear", "Oil", "Gas", "Coal"]
+        )
+        self.source_menu.grid(row=3, column=1, pady=(5, 10), padx=5)
+       
+        self.label_value = customtkinter.CTkLabel(self, text="Value : ")
+        self.label_value.grid(row=4, column=0, pady=(5, 10), padx=5)
+
+        self.value_entry = customtkinter.CTkEntry(self)
+        self.value_entry.grid(row=4, column=1, pady=(5, 10), padx=5)
+        
+        self.btn_delete = customtkinter.CTkButton(self, text="Delete" )
+        self.btn_edit = customtkinter.CTkButton(self, text="Edit")
+        
+        self.btn_delete.grid(row=5, column=0, pady=(5, 10), padx=5)
+        self.btn_edit.grid(row=5, column=1, pady=(5, 10), padx=5)
 
 class MyTabView(customtkinter.CTkTabview):
     def __init__(self,master,years,country,**kwargs):
