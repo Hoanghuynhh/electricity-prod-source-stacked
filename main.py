@@ -51,7 +51,7 @@ class ToplevelWindow(customtkinter.CTkToplevel):
         self.value_entry = customtkinter.CTkEntry(self)
         self.value_entry.grid(row=4, column=1, pady=(5, 10), padx=5)
         
-        self.btn_delete = customtkinter.CTkButton(self, text="Delete" )
+        self.btn_delete = customtkinter.CTkButton(self, text="Delete",command=self.delete)
         self.btn_edit = customtkinter.CTkButton(self, text="Edit",command = self.edit)
         
         self.btn_delete.grid(row=5, column=0, pady=(5, 10), padx=5)
@@ -79,9 +79,40 @@ class ToplevelWindow(customtkinter.CTkToplevel):
                     ans = messagebox.askyesno(title="Confirm",message=f"Do you want to change the value of {source_edit} source in {year_edit} is {entry_edit} ?")
                     if ans:
                         self.loader.update_data(country_name=self.country_var,year=year_edit,energy_type=source_edit,new_value=entry_edit)
+                        self.destroy()
                 else:
                     messagebox.showwarning(message="Value must be number",title = 'WARNING')
             
+    def delete(self):
+        year_edit = self.year_menu.get()
+        source_edit = self.source_menu.get()
+        if year_edit == '' and source_edit == '':
+            messagebox.showwarning(message="Please select a year and a type of source to delete !",title = 'WARNING')
+        elif year_edit == '':
+            messagebox.showwarning(message="Please select a year to delete !",title = 'WARNING')
+        elif source_edit == '':
+            messagebox.showwarning(message="Please select a type of source to delete !",title = 'WARNING')
+        elif year_edit == 'All' and source_edit != "All":
+            ans = messagebox.askyesno(title="Confirm",message=f"Do you want to delete {source_edit}'s values in all years ?")
+            if ans:
+                self.loader.delete_all_data_energy_type(Country_Name=self.country_var,Year=year_edit,energy_type=source_edit)
+                self.destroy()
+        elif year_edit == "All" and source_edit == "All":
+            ans = messagebox.askyesno(title="Confirm",message=f"Do you want to delete all the values of {self.country_var} ?")
+            if ans:
+                self.loader.delete_data_country(self.country_var)
+                self.destroy()
+        elif year_edit != "All" and source_edit == "All":
+            ans = messagebox.askyesno(title="Confirm",message=f"Do you want to delete all the values in {year_edit} ?")
+            if ans:
+                self.loader.delete_data_year(country_name=self.country_var,year=year_edit)
+                self.destroy()
+        elif year_edit != "All" and source_edit != "All":
+            ans = messagebox.askyesno(title="Confirm",message=f"Do you want to delete {source_edit}'s values in {year_edit} ?")
+            if ans:
+                self.loader.delete_data_energy(country_name=self.country_var,year = year_edit, energy_type=source_edit)
+                self.destroy()
+
 
     
 class MyTabView(customtkinter.CTkTabview):
@@ -255,7 +286,6 @@ class App(customtkinter.CTk):
         
         self.label_title = customtkinter.CTkLabel(master=self.left_frame, text="Electricity Production By Source")
         self.label_title.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
-        self.country = customtkinter.StringVar
         self.country_menu = customtkinter.CTkOptionMenu(
             master=self.left_frame,
             width=200,
@@ -323,6 +353,7 @@ class App(customtkinter.CTk):
         if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
             self.country = self.country_menu.get()
             self.toplevel_window = ToplevelWindow(self.country)
+            self.toplevel_window.grab_set()
         else:
             self.toplevel_window.focus()
 
