@@ -9,12 +9,9 @@ with open('data.csv','r') as file:
         d1.append(i)
 dt = {}
 
-print(d1)
-
 for i in d1:
     if i['Entity'] not in dt:
         dt[(i['Entity'])] = {
-            'Code': i['Code'],
             i['Year']:{
                     'Other':i['Other renewables excluding bioenergy - TWh (adapted for visualization of chart electricity-prod-source-stacked)'],
                     'Bioenergy':i['Electricity from bioenergy - TWh (adapted for visualization of chart electricity-prod-source-stacked)'],
