@@ -6,8 +6,8 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 from tkinter import ttk
 from tkinter import messagebox
-from data_manager import *
-from cud import *
+from GetCountryData import *
+from CountryDataManager import *
 
 customtkinter.set_appearance_mode("Dark") 
 customtkinter.set_default_color_theme("blue")
