@@ -150,17 +150,16 @@ class Country_Data_Manager:
             self.data[country_name][year] = self.clearly_data
             self.save_data()
 
-    def delete_all_data_energy_type(self, energy_type: str) -> None:
+    def delete_all_data_energy_type(self, Country_Name: str, energy_type: str) -> None:
         """
-        Xóa dữ liệu (đưa về '0') của một loại năng lượng của tất cả quốc gia
+        Xóa dữ liệu (đưa về '0') của một loại năng lượng của tất cả các năm của 1 quốc gia
 
         input: Energy_Type(str)
         output: None
         """
-        for Country_Name in self.data.keys():
-            for Year in self.data[Country_Name].keys():
-                if Year.isdigit():
-                    self.delete_data_energy(Country_Name, Year, energy_type)
+        for Year in self.data[Country_Name].keys():
+            if Year.isdigit():
+                self.delete_data_energy(Country_Name, Year, energy_type)
 
     
 if __name__ == '__main__':
