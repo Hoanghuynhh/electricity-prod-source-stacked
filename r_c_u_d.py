@@ -160,6 +160,7 @@ class Country_Data_Manager:
         for Year in self.data[Country_Name].keys():
             if Year.isdigit():
                 self.delete_data_energy(Country_Name, Year, energy_type)
+        self.save_data()
 
     
 if __name__ == '__main__':
