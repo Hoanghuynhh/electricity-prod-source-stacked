@@ -55,19 +55,6 @@ class Country_Data_Manager:
         """
         return energy_type in self.data[country_name][year]
     
-    '''Khởi tạo giá trị rỗng thuận tiện việc sửa, xóa dữ liệu'''
-    clearly_data = {
-            "Other": "0",
-            "Bioenergy": "0",
-            "Solar": "0",
-            "Wind": "0",
-            "Hydro": "0",
-            "Nuclear": "0",
-            "Oil": "0",
-            "Gas": "0",
-            "Coal": "0"
-        }
-    
 
     def save_data(self) -> None:
         """
@@ -119,7 +106,7 @@ class Country_Data_Manager:
 
     def delete_data_energy(self, country_name: str, year: str, energy_type: str) -> None:
         """
-        Đưa dữ liệu của Energy_Type trong Year/Countr/Json_File về '0'
+        Xoá dữ liệu của Energy_Type trong Year/Countr/Json_File (Đưa về '0')
 
         input: Country_Name(str), Year(str), Energy_Type(str)
         output: None
@@ -141,16 +128,16 @@ class Country_Data_Manager:
 
     def delete_data_year(self, country_name: str, year: str) -> None:
         """
-        Đưa dữ liệu của một Year trong Country/Json_File về '0'
+        Xoá dữ liệu của một năm trong Country/Json_File
 
         input: Country_Name(str), Year(str)
         output: None
         """
         if self.is_country_year(country_name, year):
-            self.data[country_name][year] = self.clearly_data
+            del self.data[country_name][year]
             self.save_data()
 
-    def delete_all_data_energy_type(self, Country_Name: str, energy_type: str) -> None:
+    def delete_all_data_energy_type(self, Country_Name: str, energy_type: str, Year:str) -> None:
         """
         Xóa dữ liệu (đưa về '0') của một loại năng lượng của tất cả các năm của 1 quốc gia
 
@@ -161,9 +148,3 @@ class Country_Data_Manager:
             if Year.isdigit():
                 self.delete_data_energy(Country_Name, Year, energy_type)
         self.save_data()
-
-    
-if __name__ == '__main__':
-    loader = Country_Data_Manager('data.json')
-    lst_temp = []
-    loader.delete_all_data_energy_type('Coal')
