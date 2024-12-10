@@ -1,3 +1,5 @@
+import os
+from convert_data import *
 import customtkinter
 from CTkRangeSlider import *
 import numpy as np
@@ -9,13 +11,17 @@ from tkinter import messagebox
 from GetCountryData import *
 from CountryDataManager import *
 
+path = 'data/data.json'
+if os.path.exists(path) == False:
+    Convert_data.convert()
+
 customtkinter.set_appearance_mode("Dark") 
 customtkinter.set_default_color_theme("blue")
 
-
 class ToplevelWindow(customtkinter.CTkToplevel):
     def __init__(self,country,*args,**kwargs):
-        self.loader = Country_Data_Manager("data.json")
+        self.loader = Country_Data_Manager("data/data.json")
+        self.loaderdata = Get_Country_Data("data/data.json")
         super().__init__(*args,**kwargs)
         self.geometry("300x170")
         self.country_var = country
@@ -25,7 +31,7 @@ class ToplevelWindow(customtkinter.CTkToplevel):
         self.year_var = customtkinter.StringVar()
         self.year_menu = customtkinter.CTkOptionMenu(self, 
             variable=self.year_var, 
-            values=['All']+Get_Country_Data('data.json').Get_Year_of_one_Country(self.country_var)
+            values=['All']+self.loaderdata.Get_Year_of_one_Country(self.country_var)
         )
         self.year_menu.grid(row=2, column=1, pady=(5, 10), padx=5)
 
@@ -70,11 +76,9 @@ class ToplevelWindow(customtkinter.CTkToplevel):
                 messagebox.showwarning(message="Please choose one type of source except All !",title = 'WARNING')
             else:
                 if entry_edit.isdigit():
-
-                    '''
                     ans = messagebox.askyesno(title="Confirm",message=f"Do you want to change the value of {source_edit} source in {year_edit} is {entry_edit} ?")
                     if ans:
-                        self.loader.update_data(country_name=self.country_var,year=year_edit,energy_type=source_edit,new_value=entry_edit)'''
+                        self.loader.update_data(country_name=self.country_var,year=year_edit,energy_type=source_edit,new_value=entry_edit)
                 else:
                     messagebox.showwarning(message="Value must be number",title = 'WARNING')
             
@@ -127,8 +131,8 @@ class MyTabView(customtkinter.CTkTabview):
         self.tree.column("Column10", width=120,stretch=False)
         self.tree.column("Column11", width=120,stretch=False)
         # Thêm dữ liệu vào bảng
-
-        self.data = Get_Country_Data('data.json').Get_Data_From_Year_to_Year(str(self.country),str(int(self.years[0])),str(int(self.years[1])))
+        self.loaderdata = Get_Country_Data('data/data.json')
+        self.data = self.loaderdata.Get_Data_From_Year_to_Year(str(self.country),str(int(self.years[0])),str(int(self.years[1])))
         for row in self.data:
             self.tree.insert("", "end", values=row)
 
@@ -150,7 +154,7 @@ class MyTabView(customtkinter.CTkTabview):
         self.tab("Graph").grid_columnconfigure(0, weight=1)
         self.tab("Graph").grid_rowconfigure(0, weight=1)
         
-        self.yeargraph,self.other,self.Bioenergy,self.Solar,self.Wind, self.Hydro,self.Nuclear,self.Old,self.Gas,self.Coal = Get_Country_Data('data.json').Get_Data_From_Year_to_Year_Graph(str(self.country),str(int(self.years[0])),str(int(self.years[1])))
+        self.yeargraph,self.other,self.Bioenergy,self.Solar,self.Wind, self.Hydro,self.Nuclear,self.Old,self.Gas,self.Coal = self.loaderdata.Get_Data_From_Year_to_Year_Graph(str(self.country),str(int(self.years[0])),str(int(self.years[1])))
         self.fig = Figure(figsize=(17, 10))
         self.ax = self.fig.add_subplot(111)
         self.canvas = FigureCanvasTkAgg(self.fig, master=self.tab("Graph"))
@@ -162,7 +166,7 @@ class MyTabView(customtkinter.CTkTabview):
  
 
     def update_table(self):
-        self.data = Get_Country_Data('data.json').Get_Data_From_Year_to_Year(str(self.country),str(int(self.years[0])),str(int(self.years[1])))
+        self.data = Get_Country_Data('data/data.json').Get_Data_From_Year_to_Year(str(self.country),str(int(self.years[0])),str(int(self.years[1])))
         self.current_page = 1  # Reset về trang đầu tiên
         self.show_page(self.current_page)
 
@@ -234,6 +238,7 @@ class App(customtkinter.CTk):
         #chia window làm 2 frame
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(0, weight=1)
+        self.loaderdata = Get_Country_Data('data/data.json')
 
         self.left_frame = customtkinter.CTkFrame(
             master = self,
@@ -254,7 +259,7 @@ class App(customtkinter.CTk):
         self.country_menu = customtkinter.CTkOptionMenu(
             master=self.left_frame,
             width=200,
-            values=Get_Country_Data('data.json').Get_Country_Name(),
+            values=self.loaderdata.Get_Country_Name(),
         )
         self.country_menu.grid(row=1, column=0, sticky="nsew", padx=10, pady=10)
         
@@ -308,7 +313,7 @@ class App(customtkinter.CTk):
         self.tab_view.update_table()
 
         # Cập nhật biểu đồ
-        yeargraph,other,Bioenergy,Solar,Wind, Hydro,Nuclear,Old,Gas,Coal = Get_Country_Data('data.json').Get_Data_From_Year_to_Year_Graph(str(self.selected_country),str(int(self.selected_years[0])),str(int(self.selected_years[1])))
+        yeargraph,other,Bioenergy,Solar,Wind, Hydro,Nuclear,Old,Gas,Coal = Get_Country_Data('data/data.json').Get_Data_From_Year_to_Year_Graph(str(self.selected_country),str(int(self.selected_years[0])),str(int(self.selected_years[1])))
 
         self.tab_view.update_graph(yeargraph,other,Bioenergy,Solar,Wind, Hydro,Nuclear,Old,Gas,Coal)
 
