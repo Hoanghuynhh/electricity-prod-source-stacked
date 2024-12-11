@@ -176,44 +176,48 @@ class AddDataWindow(customtkinter.CTkToplevel):
         self.coal_entry = customtkinter.CTkEntry(self)
         self.coal_entry.grid(row=11, column=1,sticky="nsew", pady=10, padx=10)
 
-        self.add_btn = customtkinter.CTkButton(self,text='Add')
+        self.add_btn = customtkinter.CTkButton(self,text='Add',command=self.add)
         self.add_btn.grid(row = 12,columnspan=2,sticky="nsew", pady=10, padx=10)
 
-        def add():
-            country = self.country_entry.get()
-            year = self.year_slider.get()
-            other = self.other_entry.get()
-            bio = self.bio_entry.get()
-            solar = self.solar_entry.get()
-            wind =  self.wind_entry.get()
-            hydro = self.hydro_entry.get()
-            nuclear = self.nuclear_entry.get()
-            oil = self.oil_entry.get()
-            gas = self.gas_entry.get()
-            coal = self.coal_entry.get()
+    def add(self):
+        loader = Country_Data_Manager("data/data.json")
+        country = self.country_entry.get()
+        year = self.year_slider.get()
+        other = self.other_entry.get()
+        bio = self.bio_entry.get()
+        solar = self.solar_entry.get()
+        wind =  self.wind_entry.get()
+        hydro = self.hydro_entry.get()
+        nuclear = self.nuclear_entry.get()
+        oil = self.oil_entry.get()
+        gas = self.gas_entry.get()
+        coal = self.coal_entry.get()
 
-            if country == '':
-                messagebox.showwarning(message="Please enter a country !",title = 'WARNING')
-            elif other == '':
-                messagebox.showwarning(message="Please enter other's value !",title = 'WARNING')
-            elif bio == '':
-                messagebox.showwarning(message="Please enter bioenergy's value !",title = 'WARNING')
-            elif solar == '':
-                messagebox.showwarning(message="Please enter solar's value !",title = 'WARNING')
-            elif wind == '':
-                messagebox.showwarning(message="Please enter wind's value !",title = 'WARNING')
-            elif hydro == '':
-                messagebox.showwarning(message="Please enter hydro's value !",title = 'WARNING')
-            elif nuclear == '':
-                messagebox.showwarning(message="Please enter nuclear's value !",title = 'WARNING')
-            elif oil == '':
-                messagebox.showwarning(message="Please enter oil's value !",title = 'WARNING')
-            elif gas == '':
-                messagebox.showwarning(message="Please enter gas's value !",title = 'WARNING')
-            elif coal == '':
-                messagebox.showwarning(message="Please enter coal's value !",title = 'WARNING')
-            else:
-                ""
+        if country == '':
+            messagebox.showwarning(message="Please enter a country !",title = 'WARNING')
+        elif other == '':
+            messagebox.showwarning(message="Please enter other's value !",title = 'WARNING')
+        elif bio == '':
+            messagebox.showwarning(message="Please enter bioenergy's value !",title = 'WARNING')
+        elif solar == '':
+            messagebox.showwarning(message="Please enter solar's value !",title = 'WARNING')
+        elif wind == '':
+            messagebox.showwarning(message="Please enter wind's value !",title = 'WARNING')
+        elif hydro == '':
+            messagebox.showwarning(message="Please enter hydro's value !",title = 'WARNING')
+        elif nuclear == '':
+            messagebox.showwarning(message="Please enter nuclear's value !",title = 'WARNING')
+        elif oil == '':
+            messagebox.showwarning(message="Please enter oil's value !",title = 'WARNING')
+        elif gas == '':
+            messagebox.showwarning(message="Please enter gas's value !",title = 'WARNING')
+        elif coal == '':
+            messagebox.showwarning(message="Please enter coal's value !",title = 'WARNING')
+        else:
+            ans = messagebox.askyesno(title="Confirm",message=f"Do you want to add new values in {year} to {country} ?")
+            if ans:
+                loader.create_and_update_data(country_name=country,year=str(year),new_values=[other,bio,solar,wind,hydro,nuclear,oil,gas,coal])
+                self.destroy()
             
 
 
@@ -396,21 +400,22 @@ class App(customtkinter.CTk):
         
         self.label_title = customtkinter.CTkLabel(master=self.left_frame, text="Electricity Production By Source")
         self.label_title.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
+
+        #menu country
         self.country_menu = customtkinter.CTkOptionMenu(
             master=self.left_frame,
             width=200,
             values=self.loaderdata.Get_Country_Name(),
         )
         self.country_menu.grid(row=1, column=0, sticky="nsew", padx=10, pady=10)
-        
+
+        #slider
         self.varyearstart = customtkinter.IntVar(value=1985)
         self.varyearend = customtkinter.IntVar(value=2024)
-
         self.slider_frame = customtkinter.CTkFrame(
             master= self.left_frame,
         )
         self.slider_frame.grid(row=2, column=0, sticky="nswe",padx = 10,pady = 10)
-
         self.slider = CTkRangeSlider(master= self.slider_frame, from_=1985, to=2024,number_of_steps=39,variables = [self.varyearstart, self.varyearend],width=150)
         self.slider.grid(row=0, column=2, sticky="nswe",padx = 10,pady = 10)
         self.label_sliderstart = customtkinter.CTkLabel(master=self.slider_frame, textvariable = self.varyearstart,height = 20)
@@ -418,6 +423,7 @@ class App(customtkinter.CTk):
         self.label_sliderend = customtkinter.CTkLabel(master=self.slider_frame, textvariable = self.varyearend,height = 20)
         self.label_sliderend.grid(row=0, column=3, sticky="nsew", padx=10, pady=10)
 
+        #sort area
         self.sort_frame = customtkinter.CTkFrame(
             master= self.left_frame,
         )
@@ -431,7 +437,6 @@ class App(customtkinter.CTk):
             values=["Year","Other", "Bioenergy", "Solar", "Wind", "Hydro", "Nuclear", "Oil", "Gas", "Coal"]
         )
         self.items_menu.grid(row=0, column=1, sticky="nsew", padx=10, pady=10)
-
         self.label_sortmode = customtkinter.CTkLabel(master = self.sort_frame,text = "Sort mode")
         self.label_sortmode.grid(row = 1,column = 0,sticky="nsew", padx=10, pady=10)
         self.mod_menu = customtkinter.CTkOptionMenu(
@@ -439,48 +444,42 @@ class App(customtkinter.CTk):
             values=["Ascending","Descending"]
         )
         self.mod_menu.grid(row=1, column=1, sticky="nsew", padx=10, pady=10)
-        
+
+        #compare_data_area
         self.compare_frame = customtkinter.CTkFrame(master= self.left_frame )
         self.compare_frame.grid_columnconfigure(1, weight=1)
         self.compare_frame.grid_columnconfigure(0, weight=1)
-        self.compare_frame.grid(row=4, column=0, sticky="nswe",padx = 10,pady = 10)
-        
+        self.compare_frame.grid(row=5, column=0, sticky="nswe",padx = 10,pady = 10)
         self.label_compare = customtkinter.CTkLabel(
-        master=self.compare_frame,
-        text="Compare",  
-        width= 20  
+            master=self.compare_frame,
+            text="Compare"
         )
-        self.label_compare.grid(row=0, column=0, sticky="nsew", pady=(10, 5), padx=5 )
-
-        self.country1_var = customtkinter.StringVar(value="Chọn quốc gia 1")
+        self.label_compare.grid(row=0, columnspan=2, sticky="nsew", pady=(10, 5), padx=5 )
+        self.country1_var = customtkinter.StringVar(value="First Country")
         self.country1_menu = customtkinter.CTkOptionMenu(master=self.compare_frame , 
-            variable=self.country1_var  , 
-            values= Get_Country_Data('data.json').Get_Country_Name()
+            variable=self.country1_var , 
+            values= self.loaderdata.Get_Country_Name()
         )
         self.country1_menu.grid(row=1, column=0, pady=(5, 10), padx=5,sticky="w")
-
-        self.country2_var = customtkinter.StringVar(value="Chọn quốc gia 2")
+        self.country2_var = customtkinter.StringVar(value="Second Country")
         self.country2_menu = customtkinter.CTkOptionMenu(master=self.compare_frame , 
-            variable=self.country2_var , 
-            values=Get_Country_Data('data.json').Get_Country_Name()
+            variable=self.country2_var, 
+            values=self.loaderdata.Get_Country_Name()
         )
         self.country2_menu.grid(row=1, column=1, pady=(5, 10), padx=5)
-
-        self.year_country1_var = customtkinter.StringVar(value= "Năm quốc gia 1")
+        self.year_country1_var = customtkinter.StringVar(value= "Year")
         self.year_country1_menu = customtkinter.CTkOptionMenu(master=self.compare_frame ,
              variable=self.year_country1_var , 
              values=[str(i) for i in range(2000, 2024)]
         )
         self.year_country1_menu.grid(row=2, column=0, pady=(5, 10), padx=5,sticky="w")
-
-        self.year_country2_var = customtkinter.StringVar(value= "Năm quốc gia 2")
+        self.year_country2_var = customtkinter.StringVar(value= "Year")
         self.year_country2_menu = customtkinter.CTkOptionMenu(master=self.compare_frame , 
             variable=self.year_country2_var , 
             values=[str(i) for i in range(2000, 2024)]
         )
         self.year_country2_menu.grid(row=2, column=1, pady=(5, 10), padx=5)
-        
-        
+        #update button
         self.btn_update = customtkinter.CTkButton(
             master= self.left_frame,
             text = 'Update',
@@ -488,7 +487,7 @@ class App(customtkinter.CTk):
             fg_color= 'green'
         )
         self.btn_update.grid(row=6, column=0, pady=(5, 10), padx=5)
-        
+        #adjust data button
         self.btn_settings = customtkinter.CTkButton(
             master=self.left_frame,
             text="Adjust Data",
@@ -496,7 +495,7 @@ class App(customtkinter.CTk):
         )
         self.adjust_window = None
         self.btn_settings.grid(row=7, column=0, pady=(5, 10), padx=5)
-
+        #add data button
         self.btn_add_data = customtkinter.CTkButton(
             master=self.left_frame,
             text="Add Data",
@@ -515,6 +514,9 @@ class App(customtkinter.CTk):
     def update_handle(self):
         """Xử lý cập nhật bảng và biểu đồ khi bấm nút Update."""
         # Lấy giá trị mới từ các widget
+        loader = Get_Country_Data('data/data.json')
+
+        self.country_menu.configure(values=loader.Get_Country_Name())
         selected_country = self.country_menu.get()
         selected_years = self.slider.get()
         sort_item = self.items_menu.get()
@@ -526,7 +528,7 @@ class App(customtkinter.CTk):
         self.tab_view.update_table(sort_item, sort_mode)
 
         # Cập nhật biểu đồ
-        yeargraph,other,Bioenergy,Solar,Wind, Hydro,Nuclear,Old,Gas,Coal = Get_Country_Data('data/data.json').Get_Data_From_Year_to_Year_Graph(str(selected_country),str(int(selected_years[0])),str(int(selected_years[1])))
+        yeargraph,other,Bioenergy,Solar,Wind, Hydro,Nuclear,Old,Gas,Coal = loader.Get_Data_From_Year_to_Year_Graph(str(selected_country),str(int(selected_years[0])),str(int(selected_years[1])))
 
         self.tab_view.update_graph(yeargraph,other,Bioenergy,Solar,Wind, Hydro,Nuclear,Old,Gas,Coal)
 
