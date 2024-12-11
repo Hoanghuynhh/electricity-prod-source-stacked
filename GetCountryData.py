@@ -20,7 +20,7 @@ class Get_Country_Data:
         output:
             <tên_các_nước> (list): trả về một list chứa tên các nước có trong dữ DataBase
         """
-        return list(self.data.keys())
+        return sorted(list(self.data.keys()))
     
     # 1.2: Đưa ra các năm của 1 quốc gia:
     def Get_Year_of_one_Country(self, country_name):
