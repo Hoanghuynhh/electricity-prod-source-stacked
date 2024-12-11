@@ -55,7 +55,18 @@ class Country_Data_Manager:
         """
         return energy_type in self.data[country_name][year]
     
-
+    clearly_data = {
+            "Other": "0",
+            "Bioenergy": "0",
+            "Solar": "0",
+            "Wind": "0",
+            "Hydro": "0",
+            "Nuclear": "0",
+            "Oil": "0",
+            "Gas": "0",
+            "Coal": "0"
+        }
+    
     def save_data(self) -> None:
         """
         Lưu mới dữ liệu từ self.Data vào file Json gốc
@@ -65,17 +76,6 @@ class Country_Data_Manager:
         """
         with open(self.json_file, "w") as file:
             json.dump(self.data, file, indent = 4)
-    
-    def update_data(self, country_name: str, year: str, energy_type: str, new_value: str) -> None:
-        """
-        Cập nhật giá trị mới cho một Energy_Type trong Year/Country/Json_File
-
-        input: Country_Name(str), Year(Str), Energy_Type(str), New_Value(str)
-        output: None
-        """
-        if self.is_country_year(country_name, year):
-            self.data[country_name][year][energy_type] = new_value
-            self.save_data()
 
     def listenergy_to_dict(self, new_value: list) -> dict:
         """
@@ -86,23 +86,29 @@ class Country_Data_Manager:
         """
         value_to_dict = self.clearly_data
 
-        for i in new_value:
-            for key in value_to_dict.keys(): 
-                value_to_dict[key] = i
-
+        i = 0
+        for key in value_to_dict.keys(): 
+            value_to_dict[key] = new_value[i]
+            i+=1
         return value_to_dict
 
-    def create_data(self, country_name: str, year: str, new_values: list) -> None:
+    def create_and_update_data(self, country_name: str, year: str, new_values: list) -> None:
         """
         Thêm dữ liệu của một năm mới vào Country/Json_File
 
         input: Country_Name(str), Year(str), New_Value(dict)
         output: None
         """
-        
-        if int(year) >= 0:
-            self.data[country_name][year] = self.listenergy_to_dict(new_values)
-            self.save_data()
+        if self.is_country(country_name):
+            if not self.is_country_year(country_name, year):  # Nếu năm chưa tồn tại
+                self.data[country_name][year] = self.listenergy_to_dict(new_values)
+            else:  # Nếu năm đã tồn tại, ghi đè dữ liệu
+                self.data[country_name][year].update(self.listenergy_to_dict(new_values))
+        else:  # Nếu quốc gia chưa tồn tại
+            self.data[country_name] = {
+                year: self.listenergy_to_dict(new_values)
+            }
+        self.save_data()
 
     def delete_data_energy(self, country_name: str, year: str, energy_type: str) -> None:
         """
