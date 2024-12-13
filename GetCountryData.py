@@ -60,9 +60,6 @@ class Get_Country_Data:
         else:
             return "#None_Data"
     
-    # 1.4: Đưa ra dữ liệu của tất cả các nước trong một năm:
-    
-    
     # 1.5: lấy dữ liệu về các loại năng lượng trong một năm của một quốc gia
     def Get_EnergyData_Type_1Country_1Year(self, country_name, year):
 
@@ -79,7 +76,9 @@ class Get_Country_Data:
         """
 
         if country_name in self.data and year in self.data[country_name]:
-            energy_data = list(self.data[country_name][year])
+            energy_data = []
+            for i in list(self.data[country_name][year]):
+                energy_data.append(self.data[country_name][year].get(i))
             return energy_data
         else:
             return "#None_Data"
@@ -203,3 +202,6 @@ class Get_Country_Data:
                     Coal.append(energy_data_available[10])
             return years,Other,Bioenergy,Solar,Wind,Hydro,Nuclear,Oil,Gas,Coal
         return "#None_Data"
+
+
+print(type(Get_Country_Data('data/data.json').Get_EnergyData_Type_1Country_1Year('Vietnam','2000')))
