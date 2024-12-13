@@ -111,7 +111,6 @@ class AdjustDataWindow(customtkinter.CTkToplevel):
                 self.loader.delete_data_energy(country_name=self.country_var,year = year_edit, energy_type=source_edit)
                 self.destroy()
 
-
 class AddDataWindow(customtkinter.CTkToplevel):
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
@@ -218,12 +217,9 @@ class AddDataWindow(customtkinter.CTkToplevel):
             if ans:
                 loader.create_and_update_data(country_name=country,year=str(year),new_values=[other,bio,solar,wind,hydro,nuclear,oil,gas,coal])
                 self.destroy()
-            
-
-
 
 class MyTabView(customtkinter.CTkTabview):
-    def __init__(self,master,years,country,**kwargs):
+    def __init__(self,master,years,country,yearpie1,countrypie1,yearpie2,countrypie2,**kwargs):
         super().__init__(master,**kwargs)
         #=============table==============
         self.add("Table")
@@ -232,6 +228,10 @@ class MyTabView(customtkinter.CTkTabview):
 
         self.years = years
         self.country = country
+        self.yearpie1 = yearpie1
+        self.countrypie1 = countrypie1
+        self.yearpie2 = yearpie2
+        self.countrypie2 = countrypie2
 
         self.current_page = 1
         self.numberrowofpage=20
@@ -299,7 +299,24 @@ class MyTabView(customtkinter.CTkTabview):
         self.update_graph(self.yeargraph,self.other,self.Bioenergy,self.Solar,self.Wind, self.Hydro,self.Nuclear,self.Old,self.Gas,self.Coal)
         self.canvas_widget = self.canvas.get_tk_widget()
         self.canvas_widget.grid(row=0, column=0)
- 
+
+        #=============Compare==============#
+        self.add("Compare")
+        self.tab("Compare").grid_columnconfigure(0, weight=1)
+        self.tab("Compare").grid_columnconfigure(1, weight=1)
+        self.tab("Compare").grid_rowconfigure(0, weight=1)
+
+        self.pie1 = self.loaderdata.Get_EnergyData_Type_1Country_1Year(self.countrypie1,str(self.yearpie1))
+        self.pie2 = self.loaderdata.Get_EnergyData_Type_1Country_1Year(self.countrypie2,str(self.yearpie2))
+
+        self.figpie = Figure(figsize=(17, 10))
+        self.axpie1 = self.figpie.add_subplot(121)
+        self.axpie2 = self.figpie.add_subplot(122)
+        self.canvaspie = FigureCanvasTkAgg(self.figpie, master=self.tab('Compare'))
+        self.update_Compare(self.pie1,self.pie2)
+        self.canvaspie_widget = self.canvaspie.get_tk_widget()
+        self.canvaspie_widget.grid(row=0, column=0)
+
 
     def update_table(self,sort_item,sort_mode):
         self.data = Get_Country_Data('data/data.json').Get_Data_From_Year_to_Year(str(self.country),str(int(self.years[0])),str(int(self.years[1])))
@@ -372,6 +389,43 @@ class MyTabView(customtkinter.CTkTabview):
             self.ax.legend(loc='upper left', fontsize=10)
 
         self.canvas.draw()
+    def update_Compare(self, pie1, pie2):  
+        """Cập nhật và hiển thị biểu đồ so sánh."""
+        self.axpie1.clear()
+        self.axpie2.clear()
+
+        if pie1 == '#None_Data':
+            self.axpie1.text(0.5, 0.5, "No data available", ha="center", va="center", fontsize=16)
+        else:
+            pie1 = list(map(float,pie1))
+            # Cấu hình biểu đồ
+            self.axpie1.set_title(f'Sản lượng nguồn điện {self.yearpie1} của {self.countrypie1}')
+            mylabels1 = ['other', 'bioenergy', 'solar', 'wind', 'hydro', 'nuclear', 'oil', 'gas', 'coal']
+            # Lọc dữ liệu và nhãn
+            values1 = [value for value in pie1 if value > 0]
+            labels1 = [label for value, label in zip(pie1, mylabels1) if value > 0]
+            # Vẽ biểu đồ năng lượng
+            wedges1, texts1, autotexts1 = self.axpie1.pie(x=values1, labels=labels1, autopct='%1.1f%%')
+            # Hiển thị chú giải
+            self.axpie1.legend(wedges1, labels1, title="Nguồn", loc="lower left", bbox_to_anchor=(-0.1, -0.1))
+
+        if pie2 == '#None_Data':
+            self.axpie2.text(0.5, 0.5, "No data available", ha="center", va="center", fontsize=16)
+        else:
+            pie2 = list(map(float,pie2))
+            # Cấu hình biểu đồ
+            self.axpie2.set_title(f'Sản lượng nguồn điện {self.yearpie2} của {self.countrypie2}')
+            mylabels2 = ['other', 'bioenergy', 'solar', 'wind', 'hydro', 'nuclear', 'oil', 'gas', 'coal']
+            # Lọc dữ liệu và nhãn
+            values2 = [value for value in pie2 if value > 0]
+            labels2 = [label for value, label in zip(pie2, mylabels2) if value > 0]
+            # Vẽ biểu đồ năng lượng
+            wedges2, texts2, autotexts2 = self.axpie2.pie(x=values2, labels=labels2, autopct='%1.1f%%')
+            # Hiển thị chú giải
+            self.axpie2.legend(wedges2, labels2, title="Nguồn", loc="lower left", bbox_to_anchor=(-0.1, -0.1))
+
+        self.canvaspie.draw()
+
 
 
 class App(customtkinter.CTk):
@@ -406,7 +460,7 @@ class App(customtkinter.CTk):
             master=self.left_frame,
             width=200,
             values=self.loaderdata.Get_Country_Name(),
-        )
+)
         self.country_menu.grid(row=1, column=0, sticky="nsew", padx=10, pady=10)
 
         #slider
@@ -455,27 +509,19 @@ class App(customtkinter.CTk):
             text="Compare"
         )
         self.label_compare.grid(row=0, columnspan=2, sticky="nsew", pady=(10, 5), padx=5 )
-        self.country1_var = customtkinter.StringVar(value="First Country")
         self.country1_menu = customtkinter.CTkOptionMenu(master=self.compare_frame , 
-            variable=self.country1_var , 
             values= self.loaderdata.Get_Country_Name()
         )
         self.country1_menu.grid(row=1, column=0, pady=(5, 10), padx=5,sticky="w")
-        self.country2_var = customtkinter.StringVar(value="Second Country")
         self.country2_menu = customtkinter.CTkOptionMenu(master=self.compare_frame , 
-            variable=self.country2_var, 
             values=self.loaderdata.Get_Country_Name()
         )
         self.country2_menu.grid(row=1, column=1, pady=(5, 10), padx=5)
-        self.year_country1_var = customtkinter.StringVar(value= "Year")
         self.year_country1_menu = customtkinter.CTkOptionMenu(master=self.compare_frame ,
-             variable=self.year_country1_var , 
              values=[str(i) for i in range(2000, 2024)]
         )
         self.year_country1_menu.grid(row=2, column=0, pady=(5, 10), padx=5,sticky="w")
-        self.year_country2_var = customtkinter.StringVar(value= "Year")
-        self.year_country2_menu = customtkinter.CTkOptionMenu(master=self.compare_frame , 
-            variable=self.year_country2_var , 
+        self.year_country2_menu = customtkinter.CTkOptionMenu(master=self.compare_frame ,  
             values=[str(i) for i in range(2000, 2024)]
         )
         self.year_country2_menu.grid(row=2, column=1, pady=(5, 10), padx=5)
@@ -508,7 +554,7 @@ class App(customtkinter.CTk):
         self.right_frame.grid_columnconfigure(0, weight=1)
         self.right_frame.grid_rowconfigure(0, weight=1)
         
-        self.tab_view = MyTabView(master=self.right_frame,height = 1080,width = 1920,country= self.country_menu.get(),years=self.slider.get())
+        self.tab_view = MyTabView(master=self.right_frame,height = 1080,width = 1920,country= self.country_menu.get(),years=self.slider.get(),countrypie1 = self.country1_menu.get(),yearpie1= self.year_country1_menu.get(),countrypie2 = self.country2_menu.get(),yearpie2=self.year_country2_menu.get())
         self.tab_view.grid(row=0, column=0)
 
     def update_handle(self):
@@ -521,6 +567,14 @@ class App(customtkinter.CTk):
         selected_years = self.slider.get()
         sort_item = self.items_menu.get()
         sort_mode = self.mod_menu.get()
+        comparecountry1 = self.country1_menu.get()
+        comparecountry2 = self.country2_menu.get()
+        compareyear1 = self.year_country1_menu.get()
+        compareyear2 = self.year_country2_menu.get()
+        comparedata1 = loader.Get_EnergyData_Type_1Country_1Year(comparecountry1,str(compareyear1))
+        comparedata2 = loader.Get_EnergyData_Type_1Country_1Year(comparecountry2,str(compareyear2))
+
+        self.tab_view.update_Compare(comparedata1,comparedata2)
 
         # Cập nhật dữ liệu trong MyTabView
         self.tab_view.country = selected_country
