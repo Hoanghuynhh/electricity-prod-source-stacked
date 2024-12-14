@@ -9,18 +9,18 @@ class Country_Data_Manager:
         Khởi tạo đối tượng loader để nạp dữ liệu từ tệp Json
 
         input: Json_File (str)
-        output: Dữ liệu được nạp từ tệp Json, ở đây là 1 Dict
+        output: Dữ liệu được nạp từ tệp Json, ở đây là 1 Dict lớn gồm nhiều Dict nhỏ
 
         Example:
             loader = Country_Data_Manager("data.json")
             print(loader.data)  # In ra Dict đã nạp từ tệp JSON.
         """
-        self.json_file = json_file
-        self.data = self.load_data()
+        self.json_file = json_file # Gán file json cho biến cục bộ self.json_file
+        self.data = self.load_data() # Biến cục bộ self.data lưu Dict từ file Json
 
     def load_data(self) -> Dict:
         """
-        Đọc file Json và trả về dữ liệu từ file
+        Đọc file Json và trả về Dict từ file
 
         input: None
         output: Dictionary
@@ -69,7 +69,7 @@ class Country_Data_Manager:
     
     def save_data(self) -> None:
         """
-        Lưu mới dữ liệu từ self.Data vào file Json gốc
+        Lưu mới dữ liệu từ dữ liệu cục bộ self.Data vào file Json gốc
 
         input: None
         output: None
@@ -96,7 +96,7 @@ class Country_Data_Manager:
         """
         Thêm dữ liệu của một năm mới vào Country/Json_File
 
-        input: Country_Name(str), Year(str), New_Value(dict)
+        input: Country_Name(str), Year(str), New_Value(list)
         output: None
         """
         if self.is_country(country_name):
@@ -143,14 +143,13 @@ class Country_Data_Manager:
             del self.data[country_name][year]
             self.save_data()
 
-    def delete_all_data_energy_type(self, Country_Name: str, energy_type: str, Year:str) -> None:
+    def delete_all_data_energy_type(self, country_name: str, energy_type: str) -> None:
         """
-        Xóa dữ liệu (đưa về '0') của một loại năng lượng của tất cả các năm của 1 quốc gia
+        Xóa dữ liệu của một loại năng lượng của tất cả các năm trong 1 quốc gia (đưa về '0')
 
-        input: Energy_Type(str)
+        input: Country_Name(str), Energy_Type(str)
         output: None
         """
-        for Year in self.data[Country_Name].keys():
-            if Year.isdigit():
-                self.delete_data_energy(Country_Name, Year, energy_type)
+        for Year in self.data[country_name].keys():
+            self.delete_data_energy(country_name, Year, energy_type)
         self.save_data()
