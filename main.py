@@ -8,6 +8,7 @@ from tkinter import ttk
 from tkinter import messagebox
 from GetCountryData import *
 from CountryDataManager import *
+from findmenu import *
 
 path = 'data/data.json'
 if os.path.exists(path) == False:
@@ -26,19 +27,14 @@ class AdjustDataWindow(customtkinter.CTkToplevel):
         self.title(f"{self.country_var} Adjust Data")
         self.label_year = customtkinter.CTkLabel(self, text="Year :")
         self.label_year.grid(row=2, column=0, pady=(5, 10), padx=5)
-        self.year_var = customtkinter.StringVar()
         self.year_menu = customtkinter.CTkOptionMenu(self, 
-            variable=self.year_var, 
             values=['All']+self.loaderdata.Get_Year_of_one_Country(self.country_var)
         )
         self.year_menu.grid(row=2, column=1, pady=(5, 10), padx=5)
 
         self.label_source = customtkinter.CTkLabel(self, text="Type of Source : ")
         self.label_source.grid(row=3, column=0, pady=(5, 10), padx=5)
-
-        self.source_var = customtkinter.StringVar()
         self.source_menu = customtkinter.CTkOptionMenu(self, 
-            variable=self.source_var, 
             values=["All","Other", "Bioenergy", "Solar", "Wind", "Hydro", "Nuclear", "Oil", "Gas", "Coal"]
         )
         self.source_menu.grid(row=3, column=1, pady=(5, 10), padx=5)
@@ -461,12 +457,13 @@ class App(customtkinter.CTk):
         self.label_title.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
 
         #menu country
-        self.country_menu = customtkinter.CTkOptionMenu(
+        self.country_menu = customtkinter.CTkComboBox(
             master=self.left_frame,
             width=200,
             values=self.loaderdata.Get_Country_Name(),
-)
+        )
         self.country_menu.grid(row=1, column=0, sticky="nsew", padx=10, pady=10)
+        findbox(self.country_menu,self.loaderdata.Get_Country_Name())
 
         #slider
         self.varyearstart = customtkinter.IntVar(value=1985)
@@ -476,11 +473,11 @@ class App(customtkinter.CTk):
         )
         self.slider_frame.grid(row=2, column=0, sticky="nswe",padx = 10,pady = 10)
         self.slider = CTkRangeSlider(master= self.slider_frame, from_=1985, to=2024,number_of_steps=39,variables = [self.varyearstart, self.varyearend],width=150)
-        self.slider.grid(row=0, column=2, sticky="nswe",padx = 10,pady = 10)
+        self.slider.grid(row=0, column=1, sticky="nswe",padx = 10,pady = 10)
         self.label_sliderstart = customtkinter.CTkLabel(master=self.slider_frame, textvariable = self.varyearstart,height = 20)
-        self.label_sliderstart.grid(row=0, column=1, sticky="nsew", padx=10, pady=10)
+        self.label_sliderstart.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
         self.label_sliderend = customtkinter.CTkLabel(master=self.slider_frame, textvariable = self.varyearend,height = 20)
-        self.label_sliderend.grid(row=0, column=3, sticky="nsew", padx=10, pady=10)
+        self.label_sliderend.grid(row=0, column=2, sticky="nsew", padx=10, pady=10)
 
         #sort area
         self.sort_frame = customtkinter.CTkFrame(
@@ -514,20 +511,22 @@ class App(customtkinter.CTk):
             text="Compare"
         )
         self.label_compare.grid(row=0, columnspan=2, sticky="nsew", pady=(10, 5), padx=5 )
-        self.country1_menu = customtkinter.CTkOptionMenu(master=self.compare_frame , 
+        self.country1_menu = customtkinter.CTkComboBox(master=self.compare_frame , 
             values= self.loaderdata.Get_Country_Name()
         )
         self.country1_menu.grid(row=1, column=0, pady=(5, 10), padx=5,sticky="w")
-        self.country2_menu = customtkinter.CTkOptionMenu(master=self.compare_frame , 
+        findbox(self.country1_menu,self.loaderdata.Get_Country_Name())
+        self.country2_menu = customtkinter.CTkComboBox(master=self.compare_frame , 
             values=self.loaderdata.Get_Country_Name()
         )
         self.country2_menu.grid(row=1, column=1, pady=(5, 10), padx=5)
+        findbox(self.country2_menu,self.loaderdata.Get_Country_Name())
         self.year_country1_menu = customtkinter.CTkOptionMenu(master=self.compare_frame ,
-             values=[str(i) for i in range(2000, 2024)]
+             values=[str(i) for i in range(1985, 2024)]
         )
         self.year_country1_menu.grid(row=2, column=0, pady=(5, 10), padx=5,sticky="w")
         self.year_country2_menu = customtkinter.CTkOptionMenu(master=self.compare_frame ,  
-            values=[str(i) for i in range(2000, 2024)]
+            values=[str(i) for i in range(1985, 2024)]
         )
         self.year_country2_menu.grid(row=2, column=1, pady=(5, 10), padx=5)
         #update button
