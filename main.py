@@ -78,6 +78,7 @@ class AdjustDataWindow(customtkinter.CTkToplevel):
                     if ans:
                         self.loader.update_data(country_name=self.country_var,year=year_edit,energy_type=source_edit,new_value=entry_edit)
                         self.destroy()
+                        messagebox.showinfo("Status","Success !")
                 else:
                     messagebox.showwarning(message="Value must be number",title = 'WARNING')
             
@@ -95,21 +96,25 @@ class AdjustDataWindow(customtkinter.CTkToplevel):
             if ans:
                 self.loader.delete_all_data_energy_type(Country_Name=self.country_var,Year=year_edit,energy_type=source_edit)
                 self.destroy()
+                messagebox.showinfo("Status","Success !")
         elif year_edit == "All" and source_edit == "All":
             ans = messagebox.askyesno(title="Confirm",message=f"Do you want to delete all the values of {self.country_var} ?")
             if ans:
                 self.loader.delete_data_country(self.country_var)
                 self.destroy()
+                messagebox.showinfo("Status","Success !")
         elif year_edit != "All" and source_edit == "All":
             ans = messagebox.askyesno(title="Confirm",message=f"Do you want to delete all the values in {year_edit} ?")
             if ans:
                 self.loader.delete_data_year(country_name=self.country_var,year=year_edit)
                 self.destroy()
+                messagebox.showinfo("Status","Success !")
         elif year_edit != "All" and source_edit != "All":
             ans = messagebox.askyesno(title="Confirm",message=f"Do you want to delete {source_edit}'s values in {year_edit} ?")
             if ans:
                 self.loader.delete_data_energy(country_name=self.country_var,year = year_edit, energy_type=source_edit)
                 self.destroy()
+                messagebox.showinfo("Status","Success !")
 
 class AddDataWindow(customtkinter.CTkToplevel):
     def __init__(self,*args,**kwargs):
