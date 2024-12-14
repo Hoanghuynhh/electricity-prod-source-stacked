@@ -92,6 +92,16 @@ class Country_Data_Manager:
             i+=1
         return value_to_dict
 
+    def update_data(self, country_name: str, year: str, energy_type: str, new_value: str) -> None:
+        """
+        Cập nhật giá trị mới cho một Energy_Type trong Year/Country/Json_File
+        input: Country_Name(str), Year(Str), Energy_Type(str), New_Value(str)
+        output: None
+        """
+        if self.is_country_year(country_name, year):
+            self.data[country_name][year][energy_type] = new_value
+            self.save_data()
+
     def create_and_update_data(self, country_name: str, year: str, new_values: list) -> None:
         """
         Thêm dữ liệu của một năm mới vào Country/Json_File
