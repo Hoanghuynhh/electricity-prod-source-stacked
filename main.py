@@ -94,7 +94,7 @@ class AdjustDataWindow(customtkinter.CTkToplevel):
         elif year_edit == 'All' and source_edit != "All":
             ans = messagebox.askyesno(title="Confirm",message=f"Do you want to delete {source_edit}'s values in all years ?")
             if ans:
-                self.loader.delete_all_data_energy_type(Country_Name=self.country_var,Year=year_edit,energy_type=source_edit)
+                self.loader.delete_all_data_energy_type(country_name=self.country_var,energy_type=source_edit)
                 self.destroy()
                 messagebox.showinfo("Status","Success !")
         elif year_edit == "All" and source_edit == "All":
