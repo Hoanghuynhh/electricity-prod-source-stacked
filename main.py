@@ -318,7 +318,7 @@ class MyTabView(customtkinter.CTkTabview):
         self.axpie1 = self.figpie.add_subplot(121)
         self.axpie2 = self.figpie.add_subplot(122)
         self.canvaspie = FigureCanvasTkAgg(self.figpie, master=self.tab('Compare'))
-        self.update_Compare(self.pie1,self.pie2)
+        self.update_Compare(self.pie1,self.pie2,[self.countrypie1,self.yearpie1],[self.countrypie2,self.yearpie2])
         self.canvaspie_widget = self.canvaspie.get_tk_widget()
         self.canvaspie_widget.grid(row=0, column=0)
 
@@ -394,7 +394,7 @@ class MyTabView(customtkinter.CTkTabview):
             self.ax.legend(loc='upper left', fontsize=10)
 
         self.canvas.draw()
-    def update_Compare(self, pie1, pie2):  
+    def update_Compare(self, pie1, pie2,data1,data2):  
         """Cập nhật và hiển thị biểu đồ so sánh."""
         self.axpie1.clear()
         self.axpie2.clear()
@@ -404,7 +404,7 @@ class MyTabView(customtkinter.CTkTabview):
         else:
             pie1 = list(map(float,pie1))
             # Cấu hình biểu đồ
-            self.axpie1.set_title(f'Sản lượng nguồn điện {self.yearpie1} của {self.countrypie1}')
+            self.axpie1.set_title(f'Sản lượng nguồn điện {data1[0]} của {data1[1]}')
             mylabels1 = ['other', 'bioenergy', 'solar', 'wind', 'hydro', 'nuclear', 'oil', 'gas', 'coal']
             # Lọc dữ liệu và nhãn
             values1 = [value for value in pie1 if value > 0]
@@ -419,7 +419,7 @@ class MyTabView(customtkinter.CTkTabview):
         else:
             pie2 = list(map(float,pie2))
             # Cấu hình biểu đồ
-            self.axpie2.set_title(f'Sản lượng nguồn điện {self.yearpie2} của {self.countrypie2}')
+            self.axpie2.set_title(f'Sản lượng nguồn điện {data2[0]} của {data2[1]}')
             mylabels2 = ['other', 'bioenergy', 'solar', 'wind', 'hydro', 'nuclear', 'oil', 'gas', 'coal']
             # Lọc dữ liệu và nhãn
             values2 = [value for value in pie2 if value > 0]
@@ -579,7 +579,7 @@ class App(customtkinter.CTk):
         comparedata1 = loader.Get_EnergyData_Type_1Country_1Year(comparecountry1,str(compareyear1))
         comparedata2 = loader.Get_EnergyData_Type_1Country_1Year(comparecountry2,str(compareyear2))
 
-        self.tab_view.update_Compare(comparedata1,comparedata2)
+        self.tab_view.update_Compare(comparedata1,comparedata2,[comparecountry1,compareyear1],[comparecountry2,compareyear2])
 
         # Cập nhật dữ liệu trong MyTabView
         self.tab_view.country = selected_country
