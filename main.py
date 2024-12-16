@@ -127,7 +127,7 @@ class AddDataWindow(customtkinter.CTkToplevel):
         self.label_year = customtkinter.CTkLabel(self,text="Year:")
         self.year = customtkinter.IntVar(value = 1985)
         self.label_year.grid(row = 1,column = 0, sticky = "nsew", pady = 10,padx = 10)
-        self.year_slider = customtkinter.CTkSlider(self,from_=1985, to=2024,variable=self.year)
+        self.year_slider = customtkinter.CTkSlider(self,from_=1985, to=2024,variable=self.year,number_of_steps= 39)
         self.year_slider.grid(row = 1,column = 1,sticky = 'nsew',pady = 10,padx =10)
         self.label_yearstatus = customtkinter.CTkLabel(self,textvariable = self.year)
         self.label_yearstatus.grid(row = 2,columnspan = 2)
@@ -216,7 +216,7 @@ class AddDataWindow(customtkinter.CTkToplevel):
         else:
             ans = messagebox.askyesno(title="Confirm",message=f"Do you want to add new values in {year} to {country} ?")
             if ans:
-                loader.create_and_update_data(country_name=country,year=str(year),new_values=[other,bio,solar,wind,hydro,nuclear,oil,gas,coal])
+                loader.create_and_update_data(country_name=country,year=str(int(year)),new_values=[other,bio,solar,wind,hydro,nuclear,oil,gas,coal])
                 self.destroy()
 
 class MyTabView(customtkinter.CTkTabview):
@@ -567,6 +567,9 @@ class App(customtkinter.CTk):
         loader = Get_Country_Data('data/data.json')
 
         self.country_menu.configure(values=loader.Get_Country_Name())
+        findbox(self.country_menu,self.loaderdata.Get_Country_Name())
+        findbox(self.country1_menu,self.loaderdata.Get_Country_Name())
+        findbox(self.country2_menu,self.loaderdata.Get_Country_Name())
         selected_country = self.country_menu.get()
         selected_years = self.slider.get()
         sort_item = self.items_menu.get()
