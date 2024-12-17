@@ -195,29 +195,30 @@ class AddDataWindow(customtkinter.CTkToplevel):
 
         if country == '':
             messagebox.showwarning(message="Please enter a country !",title = 'WARNING')
-        elif other == '':
-            messagebox.showwarning(message="Please enter other's value !",title = 'WARNING')
-        elif bio == '':
-            messagebox.showwarning(message="Please enter bioenergy's value !",title = 'WARNING')
-        elif solar == '':
-            messagebox.showwarning(message="Please enter solar's value !",title = 'WARNING')
-        elif wind == '':
-            messagebox.showwarning(message="Please enter wind's value !",title = 'WARNING')
-        elif hydro == '':
-            messagebox.showwarning(message="Please enter hydro's value !",title = 'WARNING')
-        elif nuclear == '':
-            messagebox.showwarning(message="Please enter nuclear's value !",title = 'WARNING')
-        elif oil == '':
-            messagebox.showwarning(message="Please enter oil's value !",title = 'WARNING')
-        elif gas == '':
-            messagebox.showwarning(message="Please enter gas's value !",title = 'WARNING')
-        elif coal == '':
-            messagebox.showwarning(message="Please enter coal's value !",title = 'WARNING')
+        elif other == '' or other.isdigit() == False:
+            messagebox.showwarning(message="Other's value must be number !",title = 'WARNING')
+        elif bio == '' or bio.isdigit() == False:
+            messagebox.showwarning(message="Bioenergy's value must be number!",title = 'WARNING')
+        elif solar == '' or solar.isdigit() == False:
+            messagebox.showwarning(message="Solar's value must be number !",title = 'WARNING')
+        elif wind == '' or wind.isdigit() == False:
+            messagebox.showwarning(message="Wind's value must be number !",title = 'WARNING')
+        elif hydro == '' or hydro.isdigit() == False:
+            messagebox.showwarning(message="Hydro's value must be number !",title = 'WARNING')
+        elif nuclear == '' or nuclear.isdigit() == False:
+            messagebox.showwarning(message="Nuclear's value must be number !",title = 'WARNING')
+        elif oil == '' or oil.isdigit() == False:
+            messagebox.showwarning(message="Oil's value must be number !",title = 'WARNING')
+        elif gas == '' or gas.isdigit() == False:
+            messagebox.showwarning(message="Gas's value must be number !",title = 'WARNING')
+        elif coal == '' or coal.isdigit() == False:
+            messagebox.showwarning(message="Coal's value must be number !",title = 'WARNING')
         else:
-            ans = messagebox.askyesno(title="Confirm",message=f"Do you want to add new values in {year} to {country} ?")
+            ans = messagebox.askyesno(title="Confirm",message=f"Do you want to add new values in {int(year)} to {country} ?")
             if ans:
                 loader.create_and_update_data(country_name=country,year=str(int(year)),new_values=[other,bio,solar,wind,hydro,nuclear,oil,gas,coal])
                 self.destroy()
+                messagebox.showinfo("Status","Success !")
 
 class MyTabView(customtkinter.CTkTabview):
     def __init__(self,master,years,country,yearpie1,countrypie1,yearpie2,countrypie2,**kwargs):
@@ -567,9 +568,6 @@ class App(customtkinter.CTk):
         loader = Get_Country_Data('data/data.json')
 
         self.country_menu.configure(values=loader.Get_Country_Name())
-        findbox(self.country_menu,self.loaderdata.Get_Country_Name())
-        findbox(self.country1_menu,self.loaderdata.Get_Country_Name())
-        findbox(self.country2_menu,self.loaderdata.Get_Country_Name())
         selected_country = self.country_menu.get()
         selected_years = self.slider.get()
         sort_item = self.items_menu.get()
@@ -592,6 +590,11 @@ class App(customtkinter.CTk):
         yeargraph,other,Bioenergy,Solar,Wind, Hydro,Nuclear,Old,Gas,Coal = loader.Get_Data_From_Year_to_Year_Graph(str(selected_country),str(int(selected_years[0])),str(int(selected_years[1])))
 
         self.tab_view.update_graph(yeargraph,other,Bioenergy,Solar,Wind, Hydro,Nuclear,Old,Gas,Coal)
+
+        #update menu findbox
+        findbox(self.country_menu,loader.Get_Country_Name())
+        findbox(self.country1_menu,loader.Get_Country_Name())
+        findbox(self.country2_menu,loader.Get_Country_Name())
 
     def open_adjustwindow(self):
         """Khởi tạo cửa sổ phụ"""
