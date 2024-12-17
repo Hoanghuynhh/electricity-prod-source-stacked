@@ -2,17 +2,22 @@
 
 #### THÀNH VIÊN NHÓM:
 
-1. Huỳnh Đức Hoàng *(MSSV: 24154039)*
-2. Lê Thắng *(MSSV: 24154116)*
-3. Nguyễn Hữu Khánh *(MSSV: 24154053)*
-4. Phạm Nguyễn Trung Tín *(MSSV: 24154122)*
-5. Phan Bình Minh *(MSSV: 24154071)*
+###### 1. Huỳnh Đức Hoàng *(MSSV: 24154039)*
+Nhiệm vụ: Kết nối giao diện - chức năng
+###### 2. Lê Thắng *(MSSV: 24154116)*
+Nhiệm vụ: Code chức năng thêm - xóa - sửa dữ liệu
+###### 3. Nguyễn Hữu Khánh *(MSSV: 24154053)*
+Nhiệm vụ: Code vẽ biểu đồ
+###### 4. Phạm Nguyễn Trung Tín *(MSSV: 24154122)*
+Nhiệm vụ: Code giao diện chính
+###### 5. Phan Bình Minh *(MSSV: 24154071)*
+Nhiệm vụ: Code chức năng khai thác - đọc dữ liệu
 
-### Mô Tả Chương Trình Khai Thác Dữ Liệu Điện Của Các Quốc Gia - Vùng Lãnh Thổ - Châu Lục - Thế Giới
+### Mô Tả - Hướng Dẫn Sử Dụng Chương Trình Khai Thác Dữ Liệu Điện Của Các Quốc Gia - Vùng Lãnh Thổ - Châu Lục - Thế Giới
 
 ##### 1. Mô Tả Về Chương Trình:
 
-Chương trình khai thác và thao tác trên dữ liệu các quốc gia này là một chương trình cho phép người dùng *tìm kiếm*, *thay đổi*, *thêm* và *xóa* các loại dữ liệu khác nhau của nhiều quốc gia, vùng lành thổ, châu lục và cả thế giới. Ngoài ra người dùng còn có thể lựa chọn trực quang hóa dữ liệu đó thông qua phương pháp vẽ biểu đồ mà chương trình hỗ trợ.
+Chương trình khai thác và thao tác trên dữ liệu các quốc gia này là một chương trình cho phép người dùng *tìm kiếm*, *thay đổi*, *thêm* và *xóa* các loại dữ liệu khác nhau của nhiều quốc gia, vùng lành thổ, châu lục và cả thế giới. Ngoài ra người dùng còn có thể lựa chọn trực quang hóa dữ liệu đó hoặc so sánh những dữ liệu mà người dùng muốn thông qua phương pháp vẽ biểu đồ mà chương trình hỗ trợ.
 
 ##### 2. Hướng Dẫn Setup Môi Trường Hoạt Động:
 
@@ -92,3 +97,13 @@ Sau khi lựa chọn xong, người dùng cần chọn "Update" và chuyển san
 ![Minh họa compare - compare](pic/compare_matplotlib_pic.png)
 
 ###### 3.4 Thêm Dữ Liệu (Add Data)
+Để có thể sử dụng chức năng thêm dữ liệu, người dùng chọn ô "Add Data" rồi thực hiện lựa chọn và nhập dữ liệu vào những mục yêu cầu như hình bên dưới:
+![Ảnh minh họa Add Data](pic//add_data_pic.png)
+
+Sau khi đã nhập dữ liệu xong người dùng chọn "Add" và chọn nút "Update" để có thể cập nhật những dữ liệu mà người dùng vừa nhập vào dữ liệu gốc
+
+
+
+
+
+
