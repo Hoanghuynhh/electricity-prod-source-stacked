@@ -23,6 +23,7 @@ class AdjustDataWindow(customtkinter.CTkToplevel):
         self.loader = Country_Data_Manager("data/data.json")
         self.loaderdata = Get_Country_Data("data/data.json")
         self.geometry("300x170")
+        self.resizable(False, False)
         self.country_var = country
         self.title(f"{self.country_var} Adjust Data")
         self.label_year = customtkinter.CTkLabel(self, text="Year :")
@@ -117,6 +118,7 @@ class AddDataWindow(customtkinter.CTkToplevel):
         super().__init__(*args,**kwargs)
         self.loader = Country_Data_Manager("data/data.json")
         self.geometry("300x620")
+        self.resizable(False, False)
         self.title("Add new data")
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
