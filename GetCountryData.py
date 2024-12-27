@@ -124,9 +124,9 @@ class Get_Country_Data:
         # if country_name in list(self.data.keys()) and year in list(self.data[country_name].keys()):
         if country_name in self.data and year in self.data[country_name]:
             Type_Val = self.data[country_name][year]  
-            if isinstance(Type_Val, dict):
+            if isinstance(Type_Val, dict):  
                 energy_data_list = [
-                    country_name,
+                    country_name,  
                     year,
                     float(Type_Val.get("Other", 0)),
                     float(Type_Val.get("Bioenergy", 0)),
@@ -150,7 +150,7 @@ class Get_Country_Data:
 
         year_start = int(year_start)
         year_end = int(year_end)
-
+        
         if year_start >= year_end:
             return "#None_Data"
 
@@ -205,3 +205,34 @@ class Get_Country_Data:
                     Coal.append(energy_data_available[10])
             return years,Other,Bioenergy,Solar,Wind,Hydro,Nuclear,Oil,Gas,Coal
         return "#None_Data"
+
+
+    def Get_All_Data(self):
+        all_data = []
+        for country in self.data:
+            for year in self.data[country]:
+                record = [country, year] + list(self.data[country][year].values())
+                all_data.append(record)
+
+        return all_data
+    def Get_Multiple_Country_Data_From_Year_to_Year(self, countries, year_start, year_end):
+        """
+        Lấy dữ liệu của các quốc gia trong một khoảng năm.
+
+        Args:
+          countries: Danh sách các quốc gia cần lấy dữ liệu.
+          year_start: Năm bắt đầu.
+          year_end: Năm kết thúc.
+
+        Returns:
+          Danh sách các dòng dữ liệu.
+        """
+        data_list = []
+        for country in countries:
+            for year in range(year_start, year_end + 1):
+                year = str(year)
+                if country in self.data and year in self.data[country]:
+                    energy_data = self.Get_aData_1Country_1Year(country, year)
+                    if energy_data:
+                        data_list.append(energy_data)
+        return data_list
