@@ -484,6 +484,7 @@ class App(customtkinter.CTk):
         )
         self.slider_frame.grid(row=2, column=0, sticky="nswe",padx = 10,pady = 10)
         self.slider = CTkRangeSlider(master= self.slider_frame, from_=1985, to=2024,number_of_steps=39,variables = [self.varyearstart, self.varyearend],width=150)
+        self.slider.bind("<B1-Motion>", self.update_table)
         self.slider.grid(row=0, column=1, sticky="nswe",padx = 10,pady = 10)
         self.label_sliderstart = customtkinter.CTkLabel(master=self.slider_frame, textvariable = self.varyearstart,height = 20)
         self.label_sliderstart.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
@@ -585,6 +586,7 @@ class App(customtkinter.CTk):
         self.country_menu.options = loader.Get_Country_Name()
         self.country_menu.configure(values=self.country_menu.options)
         self.tab_view.update_table(sort_item, sort_mode)
+        
 
 
     def update_graph(self):
