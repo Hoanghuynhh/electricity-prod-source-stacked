@@ -449,7 +449,7 @@ class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
         self.geometry("1920x1080")
-        self.title("Dashboard")
+        self.title("Program for Mining Electricity Production Data by Source from Countries, Territories, Continents, and the World")
         
         #chia window làm 2 frame
         self.grid_columnconfigure(1, weight=1)
