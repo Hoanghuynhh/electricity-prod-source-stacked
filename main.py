@@ -483,8 +483,8 @@ class App(customtkinter.CTk):
             master= self.left_frame,
         )
         self.slider_frame.grid(row=2, column=0, sticky="nswe",padx = 10,pady = 10)
-        self.slider = CTkRangeSlider(master= self.slider_frame, from_=1985, to=2024,number_of_steps=39,variables = [self.varyearstart, self.varyearend],width=150)
-        self.slider.bind("<B1-Motion>", self.update_table)
+        self.slider = CTkRangeSlider(master= self.slider_frame, from_=1985, to=2024,number_of_steps=39,variables = [self.varyearstart, self.varyearend],width=200)
+        self.slider.bind("<ButtonRelease-1>", self.update_for_slider)
         self.slider.grid(row=0, column=1, sticky="nswe",padx = 10,pady = 10)
         self.label_sliderstart = customtkinter.CTkLabel(master=self.slider_frame, textvariable = self.varyearstart,height = 20)
         self.label_sliderstart.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
@@ -587,7 +587,9 @@ class App(customtkinter.CTk):
         self.country_menu.configure(values=self.country_menu.options)
         self.tab_view.update_table(sort_item, sort_mode)
         
-
+    def update_for_slider(self,var):
+        self.update_table()
+        self.update_graph()
 
     def update_graph(self):
         loader = Get_Country_Data('data/data.json')
@@ -629,16 +631,15 @@ class App(customtkinter.CTk):
 
     def open_adjustwindow(self):
         """Khởi tạo cửa sổ phụ"""
-        if self.adjust_window is None or not self.adjust_window.winfo_exists():
-            try:
-                self.country = self.country_menu.get()
-                self.select= self.tab_view.tree.selection()
-                self.adjust_window = AdjustDataWindow(app=self,selected_data=self.tab_view.tree.item(self.select)['values'])
-                self.adjust_window.grab_set()
-            except IndexError:
-                messagebox.showwarning("No item selected", "Please select an item to adjust.")
-        else:
-            self.adjust_window.focus()
+        try:
+            self.country = self.country_menu.get()
+            self.select= self.tab_view.tree.selection()
+            self.select = self.tab_view.tree.selection()[0]
+            self.adjust_window = AdjustDataWindow(app=self,selected_data=self.tab_view.tree.item(self.select)['values'])
+            self.adjust_window.grab_set()
+        except IndexError:
+            messagebox.showwarning("No item selected", "Please select an item to adjust.")
+            self.adjust_window.destroy()
 
     def open_addwindow(self):
         """Khởi tạo cửa sổ phụ"""
