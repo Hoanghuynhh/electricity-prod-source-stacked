@@ -13,7 +13,8 @@ class findbox():
             values=values,
             command=self.value_combobox
         )
-        self.suggest_list =values
+        self.combobox.set(self.options[0])
+        self.suggest_list = self.options[0]
         self.combobox.bind("<KeyRelease>", self.suggest)
 
     @staticmethod
