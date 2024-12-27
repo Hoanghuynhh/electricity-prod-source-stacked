@@ -227,6 +227,8 @@ class Get_Country_Data:
         Returns:
           Danh sách các dòng dữ liệu.
         """
+        if isinstance(countries,list) == False:
+            countries = [countries]
         data_list = []
         for country in countries:
             for year in range(year_start, year_end + 1):
