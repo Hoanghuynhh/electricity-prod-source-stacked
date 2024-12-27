@@ -16,106 +16,115 @@ if os.path.exists(path) == False:
 
 customtkinter.set_appearance_mode("Dark") 
 customtkinter.set_default_color_theme("blue")
-
+'''
 class AdjustDataWindow(customtkinter.CTkToplevel):
     def __init__(self,country,*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.loader = Country_Data_Manager("data/data.json")
         self.loaderdata = Get_Country_Data("data/data.json")
         self.geometry("300x170")
+        self.resizable(False, False)'''
+
+class AdjustDataWindow(ctk.CTkToplevel):
+    def __init__(self, app, selected_data, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.app = app
+        self.loader = Country_Data_Manager("data/data.json")
+        self.geometry("300x680")
         self.resizable(False, False)
-        self.country_var = country
-        self.title(f"{self.country_var} Adjust Data")
-        self.label_year = customtkinter.CTkLabel(self, text="Year :")
-        self.label_year.grid(row=2, column=0, pady=(5, 10), padx=5)
-        self.year_menu = customtkinter.CTkOptionMenu(self, 
-            values=['All']+self.loaderdata.Get_Year_of_one_Country(self.country_var)
-        )
-        self.year_menu.grid(row=2, column=1, pady=(5, 10), padx=5)
+        self.title("Adjust data")
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight=1)
 
-        self.label_source = customtkinter.CTkLabel(self, text="Type of Source : ")
-        self.label_source.grid(row=3, column=0, pady=(5, 10), padx=5)
-        self.source_menu = customtkinter.CTkOptionMenu(self, 
-            values=["All","Other", "Bioenergy", "Solar", "Wind", "Hydro", "Nuclear", "Oil", "Gas", "Coal"]
-        )
-        self.source_menu.grid(row=3, column=1, pady=(5, 10), padx=5)
-       
-        self.label_value = customtkinter.CTkLabel(self, text="Value : ")
-        self.label_value.grid(row=4, column=0, pady=(5, 10), padx=5)
+        self.country_name = selected_data[0]
+        self.year = selected_data[1]
 
-        self.value_entry = customtkinter.CTkEntry(self)
-        self.value_entry.grid(row=4, column=1, pady=(5, 10), padx=5)
+        self.label_country = ctk.CTkLabel(self, text=f"Entity: {self.country_name}")
+        self.label_country.grid(row=0, column=0, columnspan=2, sticky="nsew", pady=5, padx=5)
+        self.label_year = ctk.CTkLabel(self, text=f"Year: {self.year}")
+        self.label_year.grid(row=1, column=0, columnspan=2, sticky="nsew", pady=5, padx=5)
+
+        self.label_other = customtkinter.CTkLabel(self, text="Other:")
+        self.label_other.grid(row=3, column=0,sticky="nsew", pady=10, padx=10)
+        self.other_entry = customtkinter.CTkEntry(self)
+        self.other_entry.grid(row=3, column=1,sticky="nsew", pady=10, padx=10)
+        self.other_entry.insert(0,float(selected_data[2]))
+
+        self.label_bio = customtkinter.CTkLabel(self, text="Bioenergy:")
+        self.label_bio.grid(row=4, column=0,sticky="nsew", pady=10, padx=10)
+        self.bio_entry = customtkinter.CTkEntry(self)
+        self.bio_entry.grid(row=4, column=1,sticky="nsew", pady=10, padx=10)
+        self.bio_entry.insert(0,float(selected_data[3]))
+
+        self.label_solar = customtkinter.CTkLabel(self, text="Solar:")
+        self.label_solar.grid(row=5, column=0,sticky="nsew", pady=10, padx=10)
+        self.solar_entry = customtkinter.CTkEntry(self)
+        self.solar_entry.grid(row=5, column=1,sticky="nsew", pady=10, padx=10)
+        self.solar_entry.insert(0,float(selected_data[4]))
+
+        self.label_wind = customtkinter.CTkLabel(self, text="Wind:")
+        self.label_wind.grid(row=6, column=0,sticky="nsew", pady=10, padx=10)
+        self.wind_entry = customtkinter.CTkEntry(self)
+        self.wind_entry.grid(row=6, column=1,sticky="nsew", pady=10, padx=10)
+        self.wind_entry.insert(0,float(selected_data[5]))
+
+        self.label_hydro = customtkinter.CTkLabel(self, text="Hydro:")
+        self.label_hydro.grid(row=7, column=0,sticky="nsew", pady=10, padx=10)
+        self.hydro_entry = customtkinter.CTkEntry(self)
+        self.hydro_entry.grid(row=7, column=1,sticky="nsew", pady=10, padx=10)
+        self.hydro_entry.insert(0,float(selected_data[6]))
+
+        self.label_nuclear = customtkinter.CTkLabel(self, text="Nuclear:")
+        self.label_nuclear.grid(row=8, column=0,sticky="nsew", pady=10, padx=10)
+        self.nuclear_entry = customtkinter.CTkEntry(self)
+        self.nuclear_entry.grid(row=8, column=1,sticky="nsew", pady=10, padx=10)
+        self.nuclear_entry.insert(0,float(selected_data[7]))
+
+        self.label_oil = customtkinter.CTkLabel(self, text="Oil:")
+        self.label_oil.grid(row=9, column=0,sticky="nsew", pady=10, padx=10)
+        self.oil_entry = customtkinter.CTkEntry(self)
+        self.oil_entry.grid(row=9, column=1,sticky="nsew", pady=10, padx=10)
+        self.oil_entry.insert(0,float(selected_data[8]))
+
+        self.label_gas = customtkinter.CTkLabel(self, text="Gas:")
+        self.label_gas.grid(row=10, column=0,sticky="nsew", pady=10, padx=10)
+        self.gas_entry = customtkinter.CTkEntry(self)
+        self.gas_entry.grid(row=10, column=1,sticky="nsew", pady=10, padx=10)
+        self.gas_entry.insert(0,float(selected_data[9]))
+
+        self.label_coal = customtkinter.CTkLabel(self, text="Coal:")
+        self.label_coal.grid(row=11, column=0,sticky="nsew", pady=10, padx=10)
+        self.coal_entry = customtkinter.CTkEntry(self)
+        self.coal_entry.grid(row=11, column=1,sticky="nsew", pady=10, padx=10)
+        self.coal_entry.insert(0,float(selected_data[10]))
+
+        self.adjust_btn = ctk.CTkButton(self, text='Adjust', command=self.adjust)
+        self.adjust_btn.grid(row=12, columnspan=2, sticky="nsew", pady=10, padx=10)
+
+    def adjust(self):
+        try:
+            new_values = [
+                float(self.other_entry.get()),
+                float(self.bio_entry.get()),
+                float(self.solar_entry.get()),
+                float(self.wind_entry.get()),
+                float(self.hydro_entry.get()),
+                float(self.nuclear_entry.get()),
+                float(self.oil_entry.get()),
+                float(self.gas_entry.get()),
+                float(self.coal_entry.get())
+            ]
+            self.loader.create_and_update_data(self.country_name, str(self.year), new_values)
+            self.destroy()
+            self.app.update_table()
+            messagebox.showinfo("Status", "Success!")
+        except ValueError:
+            messagebox.showwarning(message="All values must be numbers!", title='WARNING')
         
-        self.btn_delete = customtkinter.CTkButton(self, text="Delete",command=self.delete)
-        self.btn_edit = customtkinter.CTkButton(self, text="Edit",command = self.edit)
-        
-        self.btn_delete.grid(row=5, column=0, pady=(5, 10), padx=5)
-        self.btn_edit.grid(row=5, column=1, pady=(5, 10), padx=5)
-
-    def edit(self):
-        year_edit = self.year_menu.get()
-        source_edit = self.source_menu.get()
-        entry_edit = self.value_entry.get()
-        if year_edit == '' and source_edit == '':
-            messagebox.showwarning(message="Please select a year and a type of source to edit !",title = 'WARNING')
-        elif year_edit == '':
-            messagebox.showwarning(message="Please select a year to edit !",title = 'WARNING')
-        elif source_edit == '':
-            messagebox.showwarning(message="Please select a type of source to edit !",title = 'WARNING')
-        elif entry_edit == '':
-            messagebox.showwarning(message="Please add a value to edit !",title = 'WARNING')
-        elif year_edit == 'All':
-            messagebox.showwarning(message="Please select a year except All !",title = 'WARNING')
-        else:
-            if source_edit == 'All':
-                messagebox.showwarning(message="Please choose one type of source except All !",title = 'WARNING')
-            else:
-                if entry_edit.isdigit():
-                    ans = messagebox.askyesno(title="Confirm",message=f"Do you want to change the value of {source_edit} source in {year_edit} is {entry_edit} ?")
-                    if ans:
-                        self.loader.update_data(country_name=self.country_var,year=year_edit,energy_type=source_edit,new_value=entry_edit)
-                        self.destroy()
-                        messagebox.showinfo("Status","Success !")
-                else:
-                    messagebox.showwarning(message="Value must be number",title = 'WARNING')
-            
-    def delete(self):
-        year_edit = self.year_menu.get()
-        source_edit = self.source_menu.get()
-        if year_edit == '' and source_edit == '':
-            messagebox.showwarning(message="Please select a year and a type of source to delete !",title = 'WARNING')
-        elif year_edit == '':
-            messagebox.showwarning(message="Please select a year to delete !",title = 'WARNING')
-        elif source_edit == '':
-            messagebox.showwarning(message="Please select a type of source to delete !",title = 'WARNING')
-        elif year_edit == 'All' and source_edit != "All":
-            ans = messagebox.askyesno(title="Confirm",message=f"Do you want to delete {source_edit}'s values in all years ?")
-            if ans:
-                self.loader.delete_all_data_energy_type(country_name=self.country_var,energy_type=source_edit)
-                self.destroy()
-                messagebox.showinfo("Status","Success !")
-        elif year_edit == "All" and source_edit == "All":
-            ans = messagebox.askyesno(title="Confirm",message=f"Do you want to delete all the values of {self.country_var} ?")
-            if ans:
-                self.loader.delete_data_country(self.country_var)
-                self.destroy()
-                messagebox.showinfo("Status","Success !")
-        elif year_edit != "All" and source_edit == "All":
-            ans = messagebox.askyesno(title="Confirm",message=f"Do you want to delete all the values in {year_edit} ?")
-            if ans:
-                self.loader.delete_data_year(country_name=self.country_var,year=year_edit)
-                self.destroy()
-                messagebox.showinfo("Status","Success !")
-        elif year_edit != "All" and source_edit != "All":
-            ans = messagebox.askyesno(title="Confirm",message=f"Do you want to delete {source_edit}'s values in {year_edit} ?")
-            if ans:
-                self.loader.delete_data_energy(country_name=self.country_var,year = year_edit, energy_type=source_edit)
-                self.destroy()
-                messagebox.showinfo("Status","Success !")
-
 class AddDataWindow(customtkinter.CTkToplevel):
-    def __init__(self,*args,**kwargs):
+    def __init__(self,app,*args,**kwargs):
         super().__init__(*args,**kwargs)
+        self.app = app
         self.loader = Country_Data_Manager("data/data.json")
         self.geometry("300x620")
         self.resizable(False, False)
@@ -220,10 +229,11 @@ class AddDataWindow(customtkinter.CTkToplevel):
             if ans:
                 loader.create_and_update_data(country_name=country,year=str(int(year)),new_values=[other,bio,solar,wind,hydro,nuclear,oil,gas,coal])
                 self.destroy()
+                self.app.update_table()
                 messagebox.showinfo("Status","Success !")
 
 class MyTabView(customtkinter.CTkTabview):
-    def __init__(self,master,years,country,yearpie1,countrypie1,yearpie2,countrypie2,**kwargs):
+    def __init__(self,master,years,country,countries,yearpie1,countrypie1,yearpie2,countrypie2,**kwargs):
         super().__init__(master,**kwargs)
         #=============table==============
         self.add("Table")
@@ -232,6 +242,7 @@ class MyTabView(customtkinter.CTkTabview):
 
         self.years = years
         self.country = country
+        self.countries = countries
         self.yearpie1 = yearpie1
         self.countrypie1 = countrypie1
         self.yearpie2 = yearpie2
@@ -274,7 +285,7 @@ class MyTabView(customtkinter.CTkTabview):
         self.tree.column("Column11", width=120,stretch=False)
         # Thêm dữ liệu vào bảng
         self.loaderdata = Get_Country_Data('data/data.json')
-        self.data = self.loaderdata.Get_Data_From_Year_to_Year(str(self.country),str(int(self.years[0])),str(int(self.years[1])))
+        self.data = self.loaderdata.Get_Multiple_Country_Data_From_Year_to_Year(self.countries,int(self.years[0]),int(self.years[1]))
         for row in self.data:
             self.tree.insert("", "end", values=row)
 
@@ -289,7 +300,7 @@ class MyTabView(customtkinter.CTkTabview):
         self.next_button = customtkinter.CTkButton(self.control_frame, text="Next",command=self.next_page)
         self.next_button.grid(row=0, column=2, padx=5)
 
-        self.page_label = customtkinter.CTkLabel(self.control_frame, text="Page 1")
+        self.page_label = customtkinter.CTkLabel(self.control_frame, text=f"Page 1/{(len(self.data) - 1) // self.numberrowofpage + 1}")
         self.page_label.grid(row=0, column=1, padx=5)
         #=============Graph==============#
         self.add("Graph")
@@ -323,10 +334,12 @@ class MyTabView(customtkinter.CTkTabview):
 
 
     def update_table(self,sort_item,sort_mode):
-        self.data = Get_Country_Data('data/data.json').Get_Data_From_Year_to_Year(str(self.country),str(int(self.years[0])),str(int(self.years[1])))
+        self.data = Get_Country_Data('data/data.json').Get_Multiple_Country_Data_From_Year_to_Year(self.countries,int(self.years[0]),int(self.years[1]))
         column_index = ["Entity", "Year", "Other", "Bioenergy", "Solar", "Wind", "Hydro", "Nuclear", "Oil", "Gas", "Coal"].index(sort_item)
         if sort_item == "Year":
             key_function = lambda row: int(row[column_index])
+        elif sort_item == "Entity": # Thêm điều kiện cho Entity
+            key_function = lambda row: row[column_index]
         else:
             key_function = lambda row: float(row[column_index])
     
@@ -352,7 +365,7 @@ class MyTabView(customtkinter.CTkTabview):
             self.tree.insert("", "end", values=row)
 
         # Cập nhật nhãn số trang
-        self.page_label.configure(text=f"Page {page}")
+        self.page_label.configure(text=f"Page {page}/{(len(self.data) - 1) // self.numberrowofpage + 1}")
 
     def prev_page(self):
         """Chuyển sang trang trước."""
@@ -460,13 +473,8 @@ class App(customtkinter.CTk):
         self.label_title.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
 
         #menu country
-        self.country_menu = customtkinter.CTkComboBox(
-            master=self.left_frame,
-            width=200,
-            values=self.loaderdata.Get_Country_Name(),
-        )
-        self.country_menu.grid(row=1, column=0, sticky="nsew", padx=10, pady=10)
-        findbox(self.country_menu,self.loaderdata.Get_Country_Name())
+        self.country_menu = findbox(self.left_frame,self.loaderdata.Get_Country_Name(),command=self.update_table,command2=self.update_graph,command3 = self.update_table)
+        self.country_menu.grid(row=1, column=0)
 
         #slider
         self.varyearstart = customtkinter.IntVar(value=1985)
@@ -493,14 +501,16 @@ class App(customtkinter.CTk):
         self.label_sortitem.grid(row = 0,column = 0,sticky="nsew", padx=10, pady=10)
         self.items_menu = customtkinter.CTkOptionMenu(
             master=self.sort_frame,
-            values=["Year","Other", "Bioenergy", "Solar", "Wind", "Hydro", "Nuclear", "Oil", "Gas", "Coal"]
+            values=["Entity","Year","Other", "Bioenergy", "Solar", "Wind", "Hydro", "Nuclear", "Oil", "Gas", "Coal"],
+            command = self.update_table
         )
         self.items_menu.grid(row=0, column=1, sticky="nsew", padx=10, pady=10)
         self.label_sortmode = customtkinter.CTkLabel(master = self.sort_frame,text = "Sort mode")
         self.label_sortmode.grid(row = 1,column = 0,sticky="nsew", padx=10, pady=10)
         self.mod_menu = customtkinter.CTkOptionMenu(
             master=self.sort_frame,
-            values=["Ascending","Descending"]
+            values=["Ascending","Descending"],
+            command = self.update_table
         )
         self.mod_menu.grid(row=1, column=1, sticky="nsew", padx=10, pady=10)
 
@@ -514,32 +524,30 @@ class App(customtkinter.CTk):
             text="Compare"
         )
         self.label_compare.grid(row=0, columnspan=2, sticky="nsew", pady=(10, 5), padx=5 )
-        self.country1_menu = customtkinter.CTkComboBox(master=self.compare_frame , 
-            values= self.loaderdata.Get_Country_Name()
-        )
-        self.country1_menu.grid(row=1, column=0, pady=(5, 10), padx=5,sticky="w")
-        findbox(self.country1_menu,self.loaderdata.Get_Country_Name())
-        self.country2_menu = customtkinter.CTkComboBox(master=self.compare_frame , 
-            values=self.loaderdata.Get_Country_Name()
-        )
-        self.country2_menu.grid(row=1, column=1, pady=(5, 10), padx=5)
-        findbox(self.country2_menu,self.loaderdata.Get_Country_Name())
+        self.country1_menu = findbox(self.compare_frame,self.loaderdata.Get_Country_Name(),command=self.update_compare)
+        self.country1_menu.grid(row=1, column=0)
+        
+        self.country2_menu = findbox(self.compare_frame,self.loaderdata.Get_Country_Name(),command=self.update_compare)
+        self.country2_menu.grid(row=1, column=1)
+        
         self.year_country1_menu = customtkinter.CTkOptionMenu(master=self.compare_frame ,
-             values=[str(i) for i in range(1985, 2024)]
+             values=[str(i) for i in range(1985, 2024)],
+             command=self.update_compare
         )
         self.year_country1_menu.grid(row=2, column=0, pady=(5, 10), padx=5,sticky="w")
         self.year_country2_menu = customtkinter.CTkOptionMenu(master=self.compare_frame ,  
-            values=[str(i) for i in range(1985, 2024)]
+            values=[str(i) for i in range(1985, 2024)],
+            command=self.update_compare
         )
         self.year_country2_menu.grid(row=2, column=1, pady=(5, 10), padx=5)
-        #update button
-        self.btn_update = customtkinter.CTkButton(
+        #delete button
+        self.btn_delete = customtkinter.CTkButton(
             master= self.left_frame,
-            text = 'Update',
-            command = self.update_handle,
-            fg_color= 'green'
+            text = 'Delete Data',
+            command = self.delete_data,
+            hover_color= 'red'
         )
-        self.btn_update.grid(row=6, column=0, pady=(5, 10), padx=5)
+        self.btn_delete.grid(row=6, column=0, pady=(5, 10), padx=5)
         #adjust data button
         self.btn_settings = customtkinter.CTkButton(
             master=self.left_frame,
@@ -561,56 +569,79 @@ class App(customtkinter.CTk):
         self.right_frame.grid_columnconfigure(0, weight=1)
         self.right_frame.grid_rowconfigure(0, weight=1)
         
-        self.tab_view = MyTabView(master=self.right_frame,height = 1080,width = 1920,country= self.country_menu.get(),years=self.slider.get(),countrypie1 = self.country1_menu.get(),yearpie1= self.year_country1_menu.get(),countrypie2 = self.country2_menu.get(),yearpie2=self.year_country2_menu.get())
+        self.tab_view = MyTabView(master=self.right_frame,height = 1080,width = 1920,countries = self.country_menu.getsuggestlist() ,country= self.country_menu.get(),years=self.slider.get(),countrypie1 = self.country1_menu.get(),yearpie1= self.year_country1_menu.get(),countrypie2 = self.country2_menu.get(),yearpie2=self.year_country2_menu.get())
         self.tab_view.grid(row=0, column=0)
 
-    def update_handle(self):
-        """Xử lý cập nhật bảng và biểu đồ khi bấm nút Update."""
-        # Lấy giá trị mới từ các widget
+    def update_table(self,value=0):
         loader = Get_Country_Data('data/data.json')
 
-        self.country_menu.configure(values=loader.Get_Country_Name())
-        selected_country = self.country_menu.get()
-        selected_years = self.slider.get()
+        # Cập nhật dữ liệu trong MyTabView
+        self.tab_view.country = self.country_menu.get()
+        self.tab_view.years = self.slider.get()
+        self.tab_view.countries = self.country_menu.getsuggestlist()
+
         sort_item = self.items_menu.get()
         sort_mode = self.mod_menu.get()
+        self.country_menu.options = loader.Get_Country_Name()
+        self.country_menu.configure(values=self.country_menu.options)
+        self.tab_view.update_table(sort_item, sort_mode)
+
+
+    def update_graph(self):
+        loader = Get_Country_Data('data/data.json')
+        selected_country = self.country_menu.get()
+        selected_years = self.slider.get()
+        yeargraph,other,Bioenergy,Solar,Wind, Hydro,Nuclear,Old,Gas,Coal = loader.Get_Data_From_Year_to_Year_Graph(str(selected_country),str(int(selected_years[0])),str(int(selected_years[1])))
+        self.tab_view.update_graph(yeargraph,other,Bioenergy,Solar,Wind, Hydro,Nuclear,Old,Gas,Coal)
+    
+    def update_compare(self,value=0):
+        loader = Get_Country_Data('data/data.json')
         comparecountry1 = self.country1_menu.get()
         comparecountry2 = self.country2_menu.get()
         compareyear1 = self.year_country1_menu.get()
         compareyear2 = self.year_country2_menu.get()
         comparedata1 = loader.Get_EnergyData_Type_1Country_1Year(comparecountry1,str(compareyear1))
         comparedata2 = loader.Get_EnergyData_Type_1Country_1Year(comparecountry2,str(compareyear2))
-
         self.tab_view.update_Compare(comparedata1,comparedata2,[comparecountry1,compareyear1],[comparecountry2,compareyear2])
 
-        # Cập nhật dữ liệu trong MyTabView
-        self.tab_view.country = selected_country
-        self.tab_view.years = selected_years
-        self.tab_view.update_table(sort_item, sort_mode)
+    def delete_data(self):
+        loader = Country_Data_Manager('data/data.json')
+        selected_items = self.tab_view.tree.selection()
+        if not selected_items:
+            messagebox.showwarning("Cảnh báo", "Vui lòng chọn ít nhất một mục để xóa.")
+            return
 
-        # Cập nhật biểu đồ
-        yeargraph,other,Bioenergy,Solar,Wind, Hydro,Nuclear,Old,Gas,Coal = loader.Get_Data_From_Year_to_Year_Graph(str(selected_country),str(int(selected_years[0])),str(int(selected_years[1])))
-
-        self.tab_view.update_graph(yeargraph,other,Bioenergy,Solar,Wind, Hydro,Nuclear,Old,Gas,Coal)
-
-        #update menu findbox
-        findbox(self.country_menu,loader.Get_Country_Name())
-        findbox(self.country1_menu,loader.Get_Country_Name())
-        findbox(self.country2_menu,loader.Get_Country_Name())
+        for item in selected_items:
+            item_values = self.tab_view.tree.item(item)['values']
+            self.tab_view.tree.delete(item)
+            country_name = item_values[0]
+            year = item_values[1]
+            loader.delete_data_year(country_name, str(year)) 
+            if not loader.data.get(country_name):
+            # Nếu không còn năm nào, xóa quốc gia khỏi dữ liệu
+                loader.delete_data_country(country_name)  
+        messagebox.showinfo("Thông báo", "Đã xóa dữ liệu thành công!")
+        self.update_table()
+        self.update_graph()
+        self.update_compare()
 
     def open_adjustwindow(self):
         """Khởi tạo cửa sổ phụ"""
         if self.adjust_window is None or not self.adjust_window.winfo_exists():
-            self.country = self.country_menu.get()
-            self.adjust_window = AdjustDataWindow(self.country)
-            self.adjust_window.grab_set()
+            try:
+                self.country = self.country_menu.get()
+                self.select= self.tab_view.tree.selection()
+                self.adjust_window = AdjustDataWindow(app=self,selected_data=self.tab_view.tree.item(self.select)['values'])
+                self.adjust_window.grab_set()
+            except IndexError:
+                messagebox.showwarning("No item selected", "Please select an item to adjust.")
         else:
             self.adjust_window.focus()
 
     def open_addwindow(self):
         """Khởi tạo cửa sổ phụ"""
         if self.add_window is None or not self.add_window.winfo_exists():
-            self.add_window = AddDataWindow()
+            self.add_window = AddDataWindow(app=self)
             self.add_window.grab_set()
         else:
             self.add_window.focus()
