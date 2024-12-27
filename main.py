@@ -100,7 +100,7 @@ class AdjustDataWindow(ctk.CTkToplevel):
 
         self.adjust_btn = ctk.CTkButton(self, text='Adjust', command=self.adjust)
         self.adjust_btn.grid(row=12, columnspan=2, sticky="nsew", pady=10, padx=10)
-
+        
     def adjust(self):
         try:
             new_values = [
