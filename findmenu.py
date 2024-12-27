@@ -2,7 +2,7 @@ import customtkinter as ctk
 import unicodedata
 
 class findbox():
-    def __init__(self, master, values,command = None,command2=None,command3=None) -> None:
+    def __init__(self, master, values,command,command2=None,command3=None) -> None:
         self.options = values
         self.command = command
         self.command2 = command2
@@ -27,7 +27,8 @@ class findbox():
         self.combobox.configure(values=self.options)  # Đặt lại danh sách gốc
         self.suggest_list = [value_choose]
         self.command()
-        self.command2()
+        if self.command2 is not None:
+            self.command2()
 
     def suggest(self,event):
         input_value = self.normalize_text(self.combobox.get())
@@ -40,6 +41,7 @@ class findbox():
             values = [x for x in self.options if self.normalize_text(x).startswith(input_value)]
             self.combobox.configure(values=values)  # Cập nhật danh sách gợi ý
             self.suggest_list = values
+        if self.command3 is not None:
             self.command3()
 
     def getsuggestlist(self):
