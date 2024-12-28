@@ -36,11 +36,10 @@ class findbox():
         if input_value == "":
             self.combobox.configure(values=self.options)  # Hiển thị tất cả nếu không nhập gì
             self.suggest_list = self.options
-            self.command3()
         else:
             # Lọc danh sách dựa trên kí tự đầu của input_value
             values = [x for x in self.options if self.normalize_text(x).startswith(input_value)]
-            self.combobox.configure(values=values)  # Cập nhật danh sách gợi ý
+            self.combobox.configure(values=values)
             self.suggest_list = values
         if self.command3 is not None:
             self.command3()
