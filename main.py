@@ -16,14 +16,6 @@ if os.path.exists(path) == False:
 
 customtkinter.set_appearance_mode("Dark") 
 customtkinter.set_default_color_theme("blue")
-'''
-class AdjustDataWindow(customtkinter.CTkToplevel):
-    def __init__(self,country,*args,**kwargs):
-        super().__init__(*args,**kwargs)
-        self.loader = Country_Data_Manager("data/data.json")
-        self.loaderdata = Get_Country_Data("data/data.json")
-        self.geometry("300x170")
-        self.resizable(False, False)'''
 
 class AdjustDataWindow(ctk.CTkToplevel):
     def __init__(self, app, selected_data, *args, **kwargs):
@@ -332,7 +324,6 @@ class MyTabView(customtkinter.CTkTabview):
         self.canvaspie_widget = self.canvaspie.get_tk_widget()
         self.canvaspie_widget.grid(row=0, column=0)
 
-
     def update_table(self,sort_item,sort_mode):
         self.data = Get_Country_Data('data/data.json').Get_Multiple_Country_Data_From_Year_to_Year(self.countries,int(self.years[0]),int(self.years[1]))
         column_index = ["Entity", "Year", "Other", "Bioenergy", "Solar", "Wind", "Hydro", "Nuclear", "Oil", "Gas", "Coal"].index(sort_item)
@@ -442,8 +433,6 @@ class MyTabView(customtkinter.CTkTabview):
             self.axpie2.legend(wedges2, labels2, title="Nguồn", loc="lower left", bbox_to_anchor=(-0.1, -0.1))
 
         self.canvaspie.draw()
-
-
 
 class App(customtkinter.CTk):
     def __init__(self):
@@ -584,10 +573,9 @@ class App(customtkinter.CTk):
         sort_item = self.items_menu.get()
         sort_mode = self.mod_menu.get()
         self.country_menu.options = loader.Get_Country_Name()
-        self.country_menu.configure(values=self.country_menu.options)
         self.tab_view.update_table(sort_item, sort_mode)
         
-    def update_for_slider(self,var):
+    def update_for_slider(self,value):
         self.update_table()
         self.update_graph()
 
@@ -598,7 +586,7 @@ class App(customtkinter.CTk):
         yeargraph,other,Bioenergy,Solar,Wind, Hydro,Nuclear,Old,Gas,Coal = loader.Get_Data_From_Year_to_Year_Graph(str(selected_country),str(int(selected_years[0])),str(int(selected_years[1])))
         self.tab_view.update_graph(yeargraph,other,Bioenergy,Solar,Wind, Hydro,Nuclear,Old,Gas,Coal)
     
-    def update_compare(self,value=0):
+    def update_compare(self,value):
         loader = Get_Country_Data('data/data.json')
         comparecountry1 = self.country1_menu.get()
         comparecountry2 = self.country2_menu.get()
@@ -648,6 +636,7 @@ class App(customtkinter.CTk):
             self.add_window.grab_set()
         else:
             self.add_window.focus()
+
 
 app = App()
 app.mainloop()
