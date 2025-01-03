@@ -27,7 +27,7 @@ class findbox():
         self.combobox.set(value_choose)
         self.combobox.configure(values=self.options)  # Đặt lại danh sách gốc
         self.suggest_list = [value_choose]
-        self.command()
+        self.command(1)
         if self.command2 is not None:
             self.command2()
 
