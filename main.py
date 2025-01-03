@@ -286,14 +286,21 @@ class MyTabView(customtkinter.CTkTabview):
         self.control_frame = customtkinter.CTkFrame(self.tab("Table"))
         self.control_frame.grid(row=1, column=0)
 
-        self.prev_button = customtkinter.CTkButton(self.control_frame, text="Previous",command=self.prev_page)
-        self.prev_button.grid(row=0, column=0, padx=5)
+        self.first_button = customtkinter.CTkButton(self.control_frame, text="First",command=self.first_page,width = 80)
+        self.first_button.grid(row=0, column=0, padx=5)
 
-        self.next_button = customtkinter.CTkButton(self.control_frame, text="Next",command=self.next_page)
-        self.next_button.grid(row=0, column=2, padx=5)
+        self.prev_button = customtkinter.CTkButton(self.control_frame, text="Previous",command=self.prev_page,width = 100)
+        self.prev_button.grid(row=0, column=1, padx=5)
+
+        self.next_button = customtkinter.CTkButton(self.control_frame, text="Next",command=self.next_page,width = 100)
+        self.next_button.grid(row=0, column=3, padx=5)
+
+        self.last_button = customtkinter.CTkButton(self.control_frame, text="Last",command=self.last_page,width = 80)
+        self.last_button.grid(row=0, column=4, padx=5)
+
 
         self.page_label = customtkinter.CTkLabel(self.control_frame, text=f"Page 1/{(len(self.data) - 1) // self.numberrowofpage + 1}")
-        self.page_label.grid(row=0, column=1, padx=5)
+        self.page_label.grid(row=0, column=2, padx=5)
         #=============Graph==============#
         self.add("Graph")
         self.tab("Graph").grid_columnconfigure(0, weight=1)
@@ -369,6 +376,14 @@ class MyTabView(customtkinter.CTkTabview):
         if self.current_page < (len(self.data) - 1) // self.numberrowofpage + 1:
             self.current_page += 1
             self.show_page(self.current_page)
+
+    def first_page(self):
+        self.current_page = 1
+        self.show_page(self.current_page)
+    
+    def last_page(self):
+        self.current_page = (len(self.data) - 1) // self.numberrowofpage + 1
+        self.show_page(self.current_page)
 
     def update_graph(self, years, other, bioenergy, solar, wind, hydro, nuclear, oil, gas, coal):
         """Cập nhật và hiển thị biểu đồ."""
@@ -576,7 +591,7 @@ class App(customtkinter.CTk):
         self.tab_view.update_table(sort_item, sort_mode)
         
     def update_for_slider(self,value):
-        self.update_table()
+        self.update_table(1)
         self.update_graph()
 
     def update_graph(self):
@@ -602,20 +617,21 @@ class App(customtkinter.CTk):
         if not selected_items:
             messagebox.showwarning("Cảnh báo", "Vui lòng chọn ít nhất một mục để xóa.")
             return
-
-        for item in selected_items:
-            item_values = self.tab_view.tree.item(item)['values']
-            self.tab_view.tree.delete(item)
-            country_name = item_values[0]
-            year = item_values[1]
-            loader.delete_data_year(country_name, str(year)) 
-            if not loader.data.get(country_name):
-            # Nếu không còn năm nào, xóa quốc gia khỏi dữ liệu
-                loader.delete_data_country(country_name)  
-        messagebox.showinfo("Thông báo", "Đã xóa dữ liệu thành công!")
-        self.update_table()
-        self.update_graph()
-        self.update_compare()
+        ans = messagebox.askyesno(title="Confirm",message=f"Do you want to delete data ?")
+        if ans:
+            for item in selected_items:
+                item_values = self.tab_view.tree.item(item)['values']
+                self.tab_view.tree.delete(item)
+                country_name = item_values[0]
+                year = item_values[1]
+                loader.delete_data_year(country_name, str(year)) 
+                if not loader.data.get(country_name):
+                # Nếu không còn năm nào, xóa quốc gia khỏi dữ liệu
+                    loader.delete_data_country(country_name)  
+            messagebox.showinfo("Thông báo", "Đã xóa dữ liệu thành công!")
+            self.update_table(1)
+            self.update_graph()
+            self.update_compare(1)
 
     def open_adjustwindow(self):
         """Khởi tạo cửa sổ phụ"""
